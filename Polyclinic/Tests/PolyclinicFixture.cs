@@ -99,6 +99,28 @@ public class PolyclinicFixture
                 BloodGroupOfPatient = BloodGroup.III,
                 RhFactorOfPatient = RhFactor.Negative,
                 Phone = "+79222222222"
+            },
+            new()
+            {
+                IdPassport = "1742 123575",
+                Name = "Olegov Svetoslav Petrovich",
+                PatientGender = Gender.Male,
+                Birthday = DateTime.Now.AddYears(-20),
+                Address = "St. Petersburg, Nevsky pr., 40",
+                BloodGroupOfPatient = BloodGroup.II,
+                RhFactorOfPatient = RhFactor.Negative,
+                Phone = "+79133546362"
+            },
+            new()
+            {
+                IdPassport = "1980 222222",
+                Name = "Revenkova Olga Igorevna",
+                PatientGender = Gender.Female,
+                Birthday = DateTime.Now.AddYears(-20),
+                Address = "St. Petersburg, Nevsky pr., 120",
+                BloodGroupOfPatient = BloodGroup.I,
+                RhFactorOfPatient = RhFactor.Negative,
+                Phone = "+79123456123"
             }
         ];
 
@@ -148,6 +170,34 @@ public class PolyclinicFixture
                 Birthday = DateTime.Now.AddYears(-48),
                 SpecializationOfDoctor = Specialization.Dentist,
                 WorkExperience = 9
+            }
+            new() {
+                IdPassport = "2465 436678",
+                Name = "Fedorov Ivan Vasilyevich",
+                Birthday = DateTime.Now.AddYears(-67),
+                SpecializationOfDoctor = Specialization.Dentist,
+                WorkExperience = 4
+            }
+            new() {
+                IdPassport = "9999 9999",
+                Name = "Fedorov Oleg Vasilyevich",
+                Birthday = DateTime.Now.AddYears(-30),
+                SpecializationOfDoctor = Specialization.Dentist,
+                WorkExperience = 1
+            }
+            new() {
+                IdPassport = "6666 666666",
+                Name = "Fedorov Petr Vasilyevich",
+                Birthday = DateTime.Now.AddYears(-29),
+                SpecializationOfDoctor = Specialization.Dentist,
+                WorkExperience = 4
+            }
+            new() {
+                IdPassport = "7777 777771",
+                Name = "Fedorov Kirill Vasilyevich",
+                Birthday = DateTime.Now.AddYears(-28),
+                SpecializationOfDoctor = Specialization.Dentist,
+                WorkExperience = 2
             }
         ];
 
