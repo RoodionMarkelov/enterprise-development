@@ -1,17 +1,17 @@
 namespace Tests;
 
 /// <summary>
-/// Класс для юнит тестов
+/// Class for unit tests
 /// </summary>
 public class PolyclinicTests : IClassFixture<PolyclinicFixture>
 {
     /// <summary>
-    /// Фикстура с тестовыми данными
+    /// Fixture with test data
     /// </summary>
     private readonly PolyclinicFixture _fixture;
 
     /// <summary>
-    /// Конструктор тестового класса, инициализирующий фикстуру
+    /// Test class constructor initializing the fixture
     /// </summary>
     /// <param name="fixture"></param>
     public PolyclinicTests(PolyclinicFixture fixture)
@@ -20,71 +20,71 @@ public class PolyclinicTests : IClassFixture<PolyclinicFixture>
     }
 
     /// <summary>
-    /// Тест для вывода информацию о всех врачах, стаж работы которых не менее 10 лет.
+    /// Test to display information about all doctors with work experience of at least 10 years
     /// </summary>
     [Fact]
-    public void CountOfDoctorsWhosWorkExperienceMoreOrEqyal10years()
+    public void CountOfDoctorsWithWorkExperienceMoreOrEqual10Years()
     {
-        const int excepted = 4;
+        const int expected = 4;
 
         var experiencedDoctors = _fixture.Doctors
            .Where(d => d.WorkExperience >= 10)
            .ToList();
 
-        Assert.Equal(excepted, experiencedDoctors.Count());
-        Assert.Contains(experiencedDoctors, d => d.Name == "Тимофеев Олег Борисович");
-        Assert.Contains(experiencedDoctors, d => d.Name == "Петров Дмитрий Викторович");
-        Assert.Contains(experiencedDoctors, d => d.Name == "Сидорова Елена Михайловна");
-        Assert.Contains(experiencedDoctors, d => d.Name == "Козлов Артем Игоревич");
+        Assert.Equal(expected, experiencedDoctors.Count);
+        Assert.Contains(experiencedDoctors, d => d.Name == "Timofeev Oleg Borisovich");
+        Assert.Contains(experiencedDoctors, d => d.Name == "Petrov Dmitry Viktorovich");
+        Assert.Contains(experiencedDoctors, d => d.Name == "Sidorova Elena Mikhailovna");
+        Assert.Contains(experiencedDoctors, d => d.Name == "Kozlov Artem Igorevich");
     }
 
     /// <summary>
-    /// Тест для вывода информацию о всех пациентах, записанных на прием к указанному врачу, упорядочить по ФИО.
+    /// Test to display information about all patients registered with a specific doctor, ordered by name
     /// </summary>
     [Fact]
     public void AllPatientsToDoctorOrderedByName()
     {
-        var excepted = 4; 
-        var doctor = _fixture.Doctors[0].Name;
+        var expected = 4;
+        var doctorName = _fixture.Doctors[0].Name;
 
         var patients = _fixture.Visits
-            .Where(v => v.Doctor.Name == doctor)
+            .Where(v => v.Doctor.Name == doctorName)
             .Select(v => v.Patient)
             .OrderBy(p => p.Name)
             .ToList();
 
-        Assert.Equal(excepted, patients.Count());
-        Assert.Equal("Иванов Петр Сидорович", patients[0].Name);
-        Assert.Equal("Кузнецова Елена Сергеевна", patients[1].Name); 
-        Assert.Equal("Николаев Виктор Иванович", patients[2].Name);
-        Assert.Equal("Петрова Мария Ивановна", patients[3].Name);
+        Assert.Equal(expected, patients.Count);
+        Assert.Equal("Ivanov Petr Sidorovich", patients[0].Name);
+        Assert.Equal("Kuznetsova Elena Sergeevna", patients[1].Name);
+        Assert.Equal("Nikolaev Viktor Ivanovich", patients[2].Name);
+        Assert.Equal("Petrova Maria Ivanovna", patients[3].Name);
     }
 
     /// <summary>
-    /// Тест для вывода  информацию о количестве повторных приемов пациентов за последний месяц.
+    /// Test to display information about the number of follow-up patient appointments in the last month
     /// </summary>
     [Fact]
-    public void CountOfRepeatVisit()
+    public void CountOfRepeatVisits()
     {
-        const int excepted = 5;
+        const int expected = 5;
 
         var lastMonth = DateTime.Now.AddMonths(-1);
         var actual = _fixture.Visits
-            .Count(v => v.IsAgain == true && v.DateOfVisit >= lastMonth);
+            .Count(v => v.IsAgain && v.DateOfVisit >= lastMonth);
 
-        Assert.Equal(excepted, actual);
+        Assert.Equal(expected, actual);
     }
 
     /// <summary>
-    /// Тест для вывода информацию о пациентах старше 30 лет, которые записаны на прием к нескольким врачам, упорядочить по дате рождения. 
+    /// Test to display information about patients over 30 years old who are registered with multiple doctors, ordered by birth date
     /// </summary>
     [Fact]
     public void AllPatientsOlder30YearsToSomeDoctorsOrderedByBirthday()
     {
         var actual = _fixture.Visits
             .GroupBy(v => v.Patient)
-            .Where(d => d.Key.Birthday <= DateTime.Now.AddYears(-30))
-            .Where(g => g.Select(v => v.Doctor).Distinct().Count() > 1) 
+            .Where(g => g.Key.Birthday <= DateTime.Now.AddYears(-30))
+            .Where(g => g.Select(v => v.Doctor).Distinct().Count() > 1)
             .Select(g => g.Key)
             .OrderBy(p => p.Birthday)
             .ToList();
@@ -93,12 +93,12 @@ public class PolyclinicTests : IClassFixture<PolyclinicFixture>
     }
 
     /// <summary>
-    /// Тест для вывода информации о приемах за текущий месяц, проходящих в выбранном кабинете.
+    /// Test to display information about appointments in the current month taking place in a selected cabinet
     /// </summary>
     [Fact]
-    public void AllVisitForLastMonthInSelectedCabinet()
+    public void AllVisitsForLastMonthInSelectedCabinet()
     {
-        const int excepted = 5;
+        const int expected = 5;
         var cabinet = 101;
         var lastMonth = DateTime.Now.AddMonths(-1);
 
@@ -106,6 +106,6 @@ public class PolyclinicTests : IClassFixture<PolyclinicFixture>
             .Where(v => v.IdOfCabinet == cabinet && v.DateOfVisit >= lastMonth)
             .ToList();
 
-        Assert.Equal(excepted, actual.Count());
+        Assert.Equal(expected, actual.Count);
     }
 }

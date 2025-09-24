@@ -1,7 +1,7 @@
 ﻿namespace Domain;
 
 /// <summary>
-/// Перечисление пола пациента
+/// Enumeration of patient gender
 /// </summary>
 public enum Gender
 {
@@ -10,7 +10,7 @@ public enum Gender
 }
 
 /// <summary>
-/// Перечисление группы крови пациента
+/// Enumeration of patient blood group
 /// </summary>
 public enum BloodGroup
 {
@@ -21,7 +21,7 @@ public enum BloodGroup
 }
 
 /// <summary>
-/// Перечисление резус фактора пациента
+/// Enumeration of patient Rh factor
 /// </summary>
 public enum RhFactor
 {
@@ -30,48 +30,47 @@ public enum RhFactor
 }
 
 /// <summary>
-/// Класс для описания пациента
+/// Class describing a patient
 /// </summary>
 public class Patient
 {
     /// <summary>
-    /// Поле характеризующее номер паспорта пациента
+    /// Field representing the patient's passport number
     /// </summary>
     public required string IdPassport { get; set; }
 
     /// <summary>
-    /// Поле характеризующее имя пациента
+    /// Field representing the patient's name
     /// </summary>
     public required string Name { get; set; }
 
     /// <summary>
-    /// Поле характеризующее пол пациента
+    /// Field representing the patient's gender
     /// </summary>
     public required Gender PatientGender { get; set; }
 
     /// <summary>
-    /// Поле характеризующее день рождения пациента
+    /// Field representing the patient's birth date
     /// </summary>
     public DateTime Birthday { get; set; }
 
     /// <summary>
-    /// Поле характеризующее адресс пациента
+    /// Field representing the patient's address
     /// </summary>
     public string? Address { get; set; }
 
     /// <summary>
-    /// Поле характеризующее группу крови пациента
+    /// Field representing the patient's blood group
     /// </summary>
     public BloodGroup? BloodGroupOfPatient { get; set; }
 
     /// <summary>
-    /// Поле характеризующее резус фактор пациента
+    /// Field representing the patient's Rh factor
     /// </summary>
     public RhFactor? RhFactorOfPatient { get; set; }
 
     /// <summary>
-    /// Поле характеризующее телефон пациента
+    /// Field representing the patient's phone number
     /// </summary>
     public required string Phone { get; set; }
-
 }

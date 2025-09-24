@@ -1,7 +1,7 @@
 ﻿namespace Domain;
 
 /// <summary>
-/// Перечисление специализаций врачей
+/// Enumeration of doctor specializations
 /// </summary>
 public enum Specialization
 {
@@ -17,33 +17,32 @@ public enum Specialization
 }
 
 /// <summary>
-/// Класс для описания доктора
+/// Class describing a doctor
 /// </summary>
 public class Doctor
 {
     /// <summary>
-    /// Поле характеризующее номер паспорта доктора
+    /// Field representing the doctor's passport number
     /// </summary>
     public required string IdPassport { get; set; }
 
     /// <summary>
-    ///  Поле характеризующее имя доктора
+    /// Field representing the doctor's name
     /// </summary>
     public required string Name { get; set; }
 
     /// <summary>
-    /// Поле характерезующее дату дня рождения доктора
+    /// Field representing the doctor's birth date
     /// </summary>
     public DateTime Birthday { get; init; }
 
     /// <summary>
-    /// Поле характерезующее специализацию доктора
+    /// Field representing the doctor's specialization
     /// </summary>
     public Specialization SpecializationOfDoctor { get; set; }
 
     /// <summary>
-    /// Поле характерезующее стаж доктора
+    /// Field representing the doctor's work experience
     /// </summary>
     public int WorkExperience { get; set; }
-
 }

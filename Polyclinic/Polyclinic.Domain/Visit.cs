@@ -1,37 +1,37 @@
 ﻿namespace Domain;
 
 /// <summary>
-/// Класс для описания посищения пациента в поликлинику
+/// Class describing a patient's visit to the polyclinic
 /// </summary>
 public class Visit
 {
     /// <summary>
-    /// Поле характеризующее пациента, записанного на приём
+    /// Field representing the patient scheduled for the appointment
     /// </summary>
     public required Patient Patient { get; set; }
 
     /// <summary>
-    /// Поле характеризующее доктора, назначенного на приём
+    /// Field representing the doctor assigned to the appointment
     /// </summary>
     public required Doctor Doctor { get; set; }
 
     /// <summary>
-    /// Поле характеризующее день записи пациента
+    /// Field representing the date of the patient's appointment
     /// </summary>
     public DateTime DateOfVisit { get; set; }
 
     /// <summary>
-    /// Поле характеризующее время записи пациента
+    /// Field representing the time of the patient's appointment
     /// </summary>
     public TimeOnly TimeOfVisit { get; set; }
 
     /// <summary>
-    /// Поле характеризующее номер кабинета
+    /// Field representing the cabinet number
     /// </summary>
     public int IdOfCabinet { get; set; }
 
     /// <summary>
-    /// Поле характеризующее было ли посищение повторным
+    /// Field representing whether the visit was a follow-up
     /// </summary>
     public bool IsAgain { get; set; }
 }
