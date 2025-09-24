@@ -170,28 +170,28 @@ public class PolyclinicFixture
                 Birthday = DateTime.Now.AddYears(-48),
                 SpecializationOfDoctor = Specialization.Dentist,
                 WorkExperience = 9
-            }
+            },
             new() {
                 IdPassport = "2465 436678",
                 Name = "Fedorov Ivan Vasilyevich",
                 Birthday = DateTime.Now.AddYears(-67),
                 SpecializationOfDoctor = Specialization.Dentist,
                 WorkExperience = 4
-            }
+            },
             new() {
                 IdPassport = "9999 9999",
                 Name = "Fedorov Oleg Vasilyevich",
                 Birthday = DateTime.Now.AddYears(-30),
                 SpecializationOfDoctor = Specialization.Dentist,
                 WorkExperience = 1
-            }
+            },
             new() {
                 IdPassport = "6666 666666",
                 Name = "Fedorov Petr Vasilyevich",
                 Birthday = DateTime.Now.AddYears(-29),
                 SpecializationOfDoctor = Specialization.Dentist,
                 WorkExperience = 4
-            }
+            },
             new() {
                 IdPassport = "7777 777771",
                 Name = "Fedorov Kirill Vasilyevich",
