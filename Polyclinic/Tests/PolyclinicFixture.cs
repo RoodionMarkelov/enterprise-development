@@ -1,4 +1,4 @@
-﻿using Polyclinic.Domain;
+﻿using Domain;
 
 namespace Tests;
 

@@ -1,4 +1,4 @@
-﻿namespace Polyclinic.Domain;
+﻿namespace Domain;
 
 /// <summary>
 /// Перечисление пола пациента

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Polyclinic.Domain\Polyclinic.Domain.csproj" />
+    <ProjectReference Include="..\Polyclinic.Domain\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

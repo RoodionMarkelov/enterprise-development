@@ -1,4 +1,4 @@
-﻿namespace Polyclinic.Domain;
+﻿namespace Domain;
 
 /// <summary>
 /// Класс для описания посищения пациента в поликлинику
