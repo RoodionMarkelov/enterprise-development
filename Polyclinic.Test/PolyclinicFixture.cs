@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Polyclinic.Domain;
+﻿using Polyclinic.Domain;
 
 namespace Polyclinic.Test
 {
+    /// <summary>
+    /// Класс с данными для юнит тестов
+    /// </summary>
     public class PolyclinicFixture
     {
+        /// <summary>
+        /// Список всех пациентов
+        /// </summary>
         public List<Patient> Patients =>
             [
                 new()
@@ -102,6 +102,9 @@ namespace Polyclinic.Test
                 }
             ];
 
+        /// <summary>
+        /// Список всех докторов
+        /// </summary>
         public List<Doctor> Doctors =>
             [
                 new() {
@@ -148,6 +151,9 @@ namespace Polyclinic.Test
                 }
             ];
 
+        /// <summary>
+        /// Список всех записей на приём
+        /// </summary>
         public List<Visit> Visits =>
             [
                 new() {
