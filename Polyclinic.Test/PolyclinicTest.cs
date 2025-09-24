@@ -30,7 +30,7 @@ namespace Polyclinic.Test
         [Fact]
         public void AllPatientsToDoctorOrderedByName()
         {
-            var excepted = 2; 
+            var excepted = 4; 
             var doctor = _fixture.Doctors[0].Name;
 
             var patients = _fixture.Visits
@@ -41,13 +41,15 @@ namespace Polyclinic.Test
 
             Assert.Equal(excepted, patients.Count());
             Assert.Equal("Иванов Петр Сидорович", patients[0].Name);
-            Assert.Equal("Кузнецова Елена Сергеевна", patients[1].Name);
+            Assert.Equal("Кузнецова Елена Сергеевна", patients[1].Name); 
+            Assert.Equal("Николаев Виктор Иванович", patients[2].Name);
+            Assert.Equal("Петрова Мария Ивановна", patients[3].Name);
         }
 
         [Fact]
         public void CountOfRepeatVisit()
         {
-            const int excepted = 2;
+            const int excepted = 5;
 
             var lastMonth = DateTime.Now.AddMonths(-1);
             var actual = _fixture.Visits
@@ -74,7 +76,7 @@ namespace Polyclinic.Test
         [Fact]
         public void AllVisitForLastMonthInSelectedCabinet()
         {
-            const int excepted = 2;
+            const int excepted = 5;
             int cabinet = 101;
             var lastMonth = DateTime.Now.AddMonths(-1);
 
