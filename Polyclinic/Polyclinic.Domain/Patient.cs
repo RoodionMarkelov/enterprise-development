@@ -1,35 +1,6 @@
 ﻿namespace Domain;
 
 /// <summary>
-/// Enumeration of patient gender
-/// </summary>
-public enum Gender
-{
-    Male,
-    Female
-}
-
-/// <summary>
-/// Enumeration of patient blood group
-/// </summary>
-public enum BloodGroup
-{
-    I,
-    II,
-    III,
-    IV
-}
-
-/// <summary>
-/// Enumeration of patient Rh factor
-/// </summary>
-public enum RhFactor
-{
-    Positive,
-    Negative
-}
-
-/// <summary>
 /// Class describing a patient
 /// </summary>
 public class Patient
