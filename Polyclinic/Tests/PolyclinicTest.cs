@@ -1,41 +1,34 @@
+﻿using Domain;
+
 namespace Tests;
 
 /// <summary>
 /// Class for unit tests
 /// </summary>
-public class PolyclinicTests : IClassFixture<PolyclinicFixture>
+/// <param name="fixture">Fixture with test data</param>
+public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<PolyclinicFixture>
 {
-    /// <summary>
-    /// Fixture with test data
-    /// </summary>
-    private readonly PolyclinicFixture _fixture;
-
-    /// <summary>
-    /// Test class constructor initializing the fixture
-    /// </summary>
-    /// <param name="fixture"></param>
-    public PolyclinicTests(PolyclinicFixture fixture)
-    {
-        _fixture = fixture;
-    }
-
     /// <summary>
     /// Test to display information about all doctors with work experience of at least 10 years
     /// </summary>
     [Fact]
     public void CountOfDoctorsWithWorkExperienceMoreOrEqual10Years()
     {
-        const int expected = 4;
+        const int expectedCount = 4;
+        var expectedDoctorNames = new List<string>
+        {
+            "Timofeev Oleg Borisovich",
+            "Petrov Dmitry Viktorovich",
+            "Sidorova Elena Mikhailovna",
+            "Kozlov Artem Igorevich"
+        };
 
-        var experiencedDoctors = _fixture.Doctors
+        var experiencedDoctors = fixture.Doctors
            .Where(d => d.WorkExperience >= 10)
            .ToList();
 
-        Assert.Equal(expected, experiencedDoctors.Count);
-        Assert.Contains(experiencedDoctors, d => d.Name == "Timofeev Oleg Borisovich");
-        Assert.Contains(experiencedDoctors, d => d.Name == "Petrov Dmitry Viktorovich");
-        Assert.Contains(experiencedDoctors, d => d.Name == "Sidorova Elena Mikhailovna");
-        Assert.Contains(experiencedDoctors, d => d.Name == "Kozlov Artem Igorevich");
+        Assert.Equal(expectedCount, experiencedDoctors.Count);
+        Assert.Equal(expectedDoctorNames, experiencedDoctors.Select(d => d.Name));
     }
 
     /// <summary>
@@ -44,35 +37,41 @@ public class PolyclinicTests : IClassFixture<PolyclinicFixture>
     [Fact]
     public void AllPatientsToDoctorOrderedByName()
     {
-        var expected = 4;
-        var doctorName = _fixture.Doctors[0].Name;
+        const int expectedCount = 4;
+        var doctorId = fixture.Doctors[0].IdPassport;
+        var expectedPatientsNames = new List<string>
+        {
+            "Ivanov Petr Sidorovich",
+            "Kuznetsova Elena Sergeevna",
+            "Nikolaev Viktor Ivanovich",
+            "Petrova Maria Ivanovna"
+        };
 
-        var patients = _fixture.Visits
-            .Where(v => v.Doctor.Name == doctorName)
+        var experiencedPatients = fixture.Visits
+            .Where(v => v.Doctor.IdPassport == doctorId)
             .Select(v => v.Patient)
             .OrderBy(p => p.Name)
             .ToList();
 
-        Assert.Equal(expected, patients.Count);
-        Assert.Equal("Ivanov Petr Sidorovich", patients[0].Name);
-        Assert.Equal("Kuznetsova Elena Sergeevna", patients[1].Name);
-        Assert.Equal("Nikolaev Viktor Ivanovich", patients[2].Name);
-        Assert.Equal("Petrova Maria Ivanovna", patients[3].Name);
+        Assert.Equal(expectedCount, experiencedPatients.Count);
+        Assert.Equal(expectedPatientsNames, experiencedPatients.Select(d => d.Name));
     }
 
     /// <summary>
     /// Test to display information about the number of follow-up patient appointments in the last month
     /// </summary>
     [Fact]
-    public void CountOfRepeatVisits()
+    public void CountOfRepeatVisitsForLastMonth()
     {
-        const int expected = 5;
+        const int expectedCount = 4;
 
-        var lastMonth = DateTime.Now.AddMonths(-1);
-        var actual = _fixture.Visits
-            .Count(v => v.IsAgain && v.DateOfVisit >= lastMonth);
+        var startDate = new DateTime(2024, 1, 1);
+        var endDate = new DateTime(2024, 1, 31);
 
-        Assert.Equal(expected, actual);
+        var experiencedRepeat = fixture.Visits
+            .Count(v => v.IsAgain && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate);
+
+        Assert.Equal(expectedCount, experiencedRepeat);
     }
 
     /// <summary>
@@ -81,15 +80,32 @@ public class PolyclinicTests : IClassFixture<PolyclinicFixture>
     [Fact]
     public void AllPatientsOlder30YearsToSomeDoctorsOrderedByBirthday()
     {
-        var actual = _fixture.Visits
-            .GroupBy(v => v.Patient)
-            .Where(g => g.Key.Birthday <= DateTime.Now.AddYears(-30))
-            .Where(g => g.Select(v => v.Doctor).Distinct().Count() > 1)
-            .Select(g => g.Key)
+        const int expectedCount = 5;
+        var currentData = new DateOnly(1994, 1, 1);
+        var expectedPatientsNames = new List<string>
+        {
+            "Nikolaev Viktor Ivanovich",
+            "Orlova Svetlana Petrovna",
+            "Sidorov Andrey Vladimirovich",
+            "Ivanov Petr Sidorovich",
+            "Petrova Maria Ivanovna"
+        };
+
+        var experiencedPatients = fixture.Visits
+            .GroupBy(v => v.Patient.IdPassport)
+            .Select(g => new
+            {
+                PatientId = g.Key,
+                Patient = fixture.Patients.First(p => p.IdPassport == g.Key),
+                UniqueDoctors = g.Select(v => v.Doctor.IdPassport).Distinct().Count()
+            })
+            .Where(x => x.Patient.Birthday <= currentData && x.UniqueDoctors > 1)
+            .Select(x => x.Patient)
             .OrderBy(p => p.Birthday)
             .ToList();
 
-        Assert.Empty(actual);
+        Assert.Equal(expectedCount, experiencedPatients.Count);
+        Assert.Equal(expectedPatientsNames, experiencedPatients.Select(d => d.Name));
     }
 
     /// <summary>
@@ -98,14 +114,15 @@ public class PolyclinicTests : IClassFixture<PolyclinicFixture>
     [Fact]
     public void AllVisitsForLastMonthInSelectedCabinet()
     {
-        const int expected = 5;
-        var cabinet = 101;
-        var lastMonth = DateTime.Now.AddMonths(-1);
+        const int expectedCount = 3;
+        const string cabinet = "101-A";
+        var startDate = new DateTime(2024, 1, 1);
+        var endDate = new DateTime(2024, 1, 31);
 
-        var actual = _fixture.Visits
-            .Where(v => v.IdOfCabinet == cabinet && v.DateOfVisit >= lastMonth)
+        var experiencedVisit = fixture.Visits
+            .Where(v => v.NumberOfCabinet == cabinet && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate)
             .ToList();
 
-        Assert.Equal(expected, actual.Count);
+        Assert.Equal(expectedCount, experiencedVisit.Count);
     }
 }

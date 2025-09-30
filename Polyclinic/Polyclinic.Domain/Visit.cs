@@ -21,14 +21,9 @@ public class Visit
     public DateTime DateOfVisit { get; set; }
 
     /// <summary>
-    /// Field representing the time of the patient's appointment
-    /// </summary>
-    public TimeOnly TimeOfVisit { get; set; }
-
-    /// <summary>
     /// Field representing the cabinet number
     /// </summary>
-    public int IdOfCabinet { get; set; }
+    public required string NumberOfCabinet { get; set; }
 
     /// <summary>
     /// Field representing whether the visit was a follow-up

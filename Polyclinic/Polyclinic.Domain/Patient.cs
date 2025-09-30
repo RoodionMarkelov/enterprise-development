@@ -6,9 +6,14 @@
 public class Patient
 {
     /// <summary>
+    /// Field representing the patient's passport id number
+    /// </summary>
+    public required int IdPassport { get; set; }
+
+    /// <summary>
     /// Field representing the patient's passport number
     /// </summary>
-    public required string IdPassport { get; set; }
+    public required string Passport { get; set; }
 
     /// <summary>
     /// Field representing the patient's name
@@ -18,12 +23,12 @@ public class Patient
     /// <summary>
     /// Field representing the patient's gender
     /// </summary>
-    public required Gender PatientGender { get; set; }
+    public required Gender Gender { get; set; }
 
     /// <summary>
     /// Field representing the patient's birth date
     /// </summary>
-    public DateTime Birthday { get; set; }
+    public required DateOnly Birthday { get; set; }
 
     /// <summary>
     /// Field representing the patient's address
@@ -33,12 +38,12 @@ public class Patient
     /// <summary>
     /// Field representing the patient's blood group
     /// </summary>
-    public BloodGroup? BloodGroupOfPatient { get; set; }
+    public BloodGroup? BloodGroup { get; set; }
 
     /// <summary>
     /// Field representing the patient's Rh factor
     /// </summary>
-    public RhFactor? RhFactorOfPatient { get; set; }
+    public RhFactor? RhFactor { get; set; }
 
     /// <summary>
     /// Field representing the patient's phone number
