@@ -1,6 +1,4 @@
-﻿using Domain;
-
-namespace Tests;
+﻿namespace Tests;
 
 /// <summary>
 /// Class for unit tests
