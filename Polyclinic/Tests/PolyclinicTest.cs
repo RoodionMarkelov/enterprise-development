@@ -36,7 +36,7 @@ public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<Polyclin
     public void AllPatientsToDoctorOrderedByName()
     {
         const int expectedCount = 4;
-        var doctorId = fixture.Doctors[0].IdPassport;
+        var doctorId = fixture.Doctors[0].Id;
         var expectedPatientsNames = new List<string>
         {
             "Ivanov Petr Sidorovich",
@@ -46,7 +46,7 @@ public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<Polyclin
         };
 
         var experiencedPatients = fixture.Visits
-            .Where(v => v.Doctor.IdPassport == doctorId)
+            .Where(v => v.Doctor.Id == doctorId)
             .Select(v => v.Patient)
             .OrderBy(p => p.Name)
             .ToList();
@@ -79,7 +79,7 @@ public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<Polyclin
     public void AllPatientsOlder30YearsToSomeDoctorsOrderedByBirthday()
     {
         const int expectedCount = 5;
-        var currentData = new DateOnly(1994, 1, 1);
+        var currentDate = new DateOnly(2025, 10, 3);
         var expectedPatientsNames = new List<string>
         {
             "Nikolaev Viktor Ivanovich",
@@ -90,14 +90,14 @@ public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<Polyclin
         };
 
         var experiencedPatients = fixture.Visits
-            .GroupBy(v => v.Patient.IdPassport)
+            .GroupBy(v => v.Patient.Id)
             .Select(g => new
             {
                 PatientId = g.Key,
-                Patient = fixture.Patients.First(p => p.IdPassport == g.Key),
-                UniqueDoctors = g.Select(v => v.Doctor.IdPassport).Distinct().Count()
+                Patient = fixture.Patients.First(p => p.Id == g.Key),
+                UniqueDoctors = g.Select(v => v.Doctor.Id).Distinct().Count()
             })
-            .Where(x => x.Patient.Birthday <= currentData && x.UniqueDoctors > 1)
+            .Where(x => x.Patient.Birthday <= currentDate.AddYears(-30) && x.UniqueDoctors > 1)
             .Select(x => x.Patient)
             .OrderBy(p => p.Birthday)
             .ToList();

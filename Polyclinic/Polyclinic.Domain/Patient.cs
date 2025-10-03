@@ -8,7 +8,7 @@ public class Patient
     /// <summary>
     /// Field representing the patient's passport id number
     /// </summary>
-    public required int IdPassport { get; set; }
+    public required int Id { get; set; }
 
     /// <summary>
     /// Field representing the patient's passport number

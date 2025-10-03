@@ -14,7 +14,7 @@ public class PolyclinicFixture
     [
         new()
         {
-            IdPassport = 1,
+            Id = 1,
             Passport = "2003 256748",
             Name = "Ivanov Petr Sidorovich",
             Gender = Gender.Male,
@@ -26,7 +26,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 2,
+            Id = 2,
             Passport = "2015 123456",
             Name = "Petrova Maria Ivanovna",
             Gender = Gender.Female,
@@ -38,7 +38,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 3,
+            Id = 3,
             Passport = "1998 654321",
             Name = "Sidorov Andrey Vladimirovich",
             Gender = Gender.Male,
@@ -50,7 +50,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 4,
+            Id = 4,
             Passport = "2010 987654",
             Name = "Kuznetsova Elena Sergeevna",
             Gender = Gender.Female,
@@ -62,7 +62,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 5,
+            Id = 5,
             Passport = "2005 456789",
             Name = "Smirnov Alexey Petrovich",
             Gender = Gender.Male,
@@ -74,7 +74,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 6,
+            Id = 6,
             Passport = "2018 321654",
             Name = "Vasilyeva Olga Dmitrievna",
             Gender = Gender.Female,
@@ -86,7 +86,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 7,
+            Id = 7,
             Passport = "1975 111111",
             Name = "Nikolaev Viktor Ivanovich",
             Gender = Gender.Male,
@@ -98,7 +98,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 8,
+            Id = 8,
             Passport = "1980 222222",
             Name = "Orlova Svetlana Petrovna",
             Gender = Gender.Female,
@@ -110,7 +110,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 9,
+            Id = 9,
             Passport = "1742 123575",
             Name = "Olegov Svetoslav Petrovich",
             Gender = Gender.Male,
@@ -122,7 +122,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 10,
+            Id = 10,
             Passport = "1980 222223",
             Name = "Revenkova Olga Igorevna",
             Gender = Gender.Female,
@@ -141,7 +141,7 @@ public class PolyclinicFixture
     [
         new()
         {
-            IdPassport = 1,
+            Id = 1,
             Passport = "1223 456782",
             Name = "Timofeev Oleg Borisovich",
             Birthday = new DateOnly(1984, 1, 20),
@@ -150,7 +150,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 2,
+            Id = 2,
             Passport = "1234 567893",
             Name = "Ivanova Anna Sergeevna",
             Birthday = new DateOnly(1989, 7, 15),
@@ -159,7 +159,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 3,
+            Id = 3,
             Passport = "1345 678904",
             Name = "Petrov Dmitry Viktorovich",
             Birthday = new DateOnly(1979, 3, 8),
@@ -168,7 +168,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 4,
+            Id = 4,
             Passport = "1456 789015",
             Name = "Sidorova Elena Mikhailovna",
             Birthday = new DateOnly(1986, 11, 25),
@@ -177,7 +177,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 5,
+            Id = 5,
             Passport = "1567 890126",
             Name = "Kozlov Artem Igorevich",
             Birthday = new DateOnly(1982, 5, 30),
@@ -186,7 +186,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 6,
+            Id = 6,
             Passport = "1678 901237",
             Name = "Fedorov Sergey Vasilyevich",
             Birthday = new DateOnly(1976, 8, 12),
@@ -195,7 +195,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 7,
+            Id = 7,
             Passport = "2465 436678",
             Name = "Fedorov Ivan Vasilyevich",
             Birthday = new DateOnly(1957, 2, 28),
@@ -204,7 +204,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 8,
+            Id = 8,
             Passport = "9999 999999",
             Name = "Fedorov Oleg Vasilyevich",
             Birthday = new DateOnly(1994, 10, 5),
@@ -213,7 +213,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 9,
+            Id = 9,
             Passport = "6666 666666",
             Name = "Fedorov Petr Vasilyevich",
             Birthday = new DateOnly(1995, 12, 15),
@@ -222,7 +222,7 @@ public class PolyclinicFixture
         },
         new()
         {
-            IdPassport = 10,
+            Id = 10,
             Passport = "7777 777771",
             Name = "Fedorov Kirill Vasilyevich",
             Birthday = new DateOnly(1996, 4, 3),
