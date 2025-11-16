@@ -1,15 +1,11 @@
-﻿namespace Domain;
+﻿namespace Application.DTO;
+using Domain;
 
 /// <summary>
 /// Class describing a doctor
 /// </summary>
-public class Doctor
+public class DoctorDto
 {
-    /// <summary>
-    /// Field representing the doctor's passport id number
-    /// </summary>
-    public required int Id { get; set; }
-
     /// <summary>
     /// Field representing the doctor's passport number
     /// </summary>

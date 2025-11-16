@@ -238,6 +238,7 @@ public class PolyclinicFixture
     [
         new()
         {
+            Id = 1,
             Patient = Patients[0],
             Doctor = Doctors[0],
             DateOfVisit = new DateTime(2024, 1, 15, 10, 30, 0),
@@ -246,6 +247,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 2,
             Patient = Patients[1],
             Doctor = Doctors[1],
             DateOfVisit = new DateTime(2024, 1, 17, 14, 15, 0),
@@ -254,6 +256,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 3,
             Patient = Patients[4],
             Doctor = Doctors[2],
             DateOfVisit = new DateTime(2024, 1, 19, 9, 0, 0),
@@ -262,6 +265,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 4,
             Patient = Patients[5],
             Doctor = Doctors[3],
             DateOfVisit = new DateTime(2024, 1, 22, 11, 45, 0),
@@ -270,6 +274,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 5,
             Patient = Patients[2],
             Doctor = Doctors[4],
             DateOfVisit = new DateTime(2024, 1, 13, 16, 20, 0),
@@ -278,6 +283,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 6,
             Patient = Patients[3],
             Doctor = Doctors[0],
             DateOfVisit = new DateTime(2024, 1, 21, 13, 0, 0),
@@ -286,6 +292,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 7,
             Patient = Patients[6],
             Doctor = Doctors[0],
             DateOfVisit = new DateTime(2024, 1, 10, 9, 15, 0),
@@ -294,6 +301,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 8,
             Patient = Patients[6],
             Doctor = Doctors[1],
             DateOfVisit = new DateTime(2024, 1, 12, 11, 30, 0),
@@ -302,6 +310,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 9,
             Patient = Patients[7],
             Doctor = Doctors[2],
             DateOfVisit = new DateTime(2024, 1, 5, 15, 45, 0),
@@ -310,6 +319,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 10,
             Patient = Patients[7],
             Doctor = Doctors[4],
             DateOfVisit = new DateTime(2024, 1, 8, 10, 0, 0),
@@ -318,6 +328,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 11,
             Patient = Patients[1],
             Doctor = Doctors[0],
             DateOfVisit = new DateTime(2023, 12, 30, 14, 30, 0),
@@ -326,6 +337,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 12,
             Patient = Patients[1],
             Doctor = Doctors[3],
             DateOfVisit = new DateTime(2024, 1, 18, 16, 0, 0),
@@ -334,6 +346,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 13,
             Patient = Patients[0],
             Doctor = Doctors[3],
             DateOfVisit = new DateTime(2024, 1, 18, 16, 0, 0),
@@ -342,6 +355,7 @@ public class PolyclinicFixture
         },
         new()
         {
+            Id = 14,
             Patient = Patients[2],
             Doctor = Doctors[6],
             DateOfVisit = new DateTime(2024, 1, 18, 16, 0, 0),
