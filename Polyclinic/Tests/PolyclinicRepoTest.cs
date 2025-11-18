@@ -35,7 +35,7 @@ public class PolyclinicRepoTests(PolyclinicRepoFixture fixture) : IClassFixture<
     {
         const int expectedCount = 4;
 
-        var doctors = fixture.DoctorService.GetAll();
+        var doctors = fixture.DoctorService.GetAllDoctors();
         var doctorId = doctors[0].Id;
 
         var expectedPatientsNames = new List<string>
