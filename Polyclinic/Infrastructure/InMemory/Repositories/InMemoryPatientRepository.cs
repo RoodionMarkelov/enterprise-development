@@ -19,7 +19,8 @@ public class InMemoryPatientRepository : IPatientRepository
 
     public int Create(Patient entity)
     {
-        entity.Id = _currentId;
+        entity.Id = _currentId + 1;
+        _currentId++;
         _items.Add(entity);
         return entity.Id;
     }
