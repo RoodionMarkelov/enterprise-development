@@ -1,30 +1,36 @@
-using Infrastructure.InMemory.Seeders;
-using Infrastructure.InMemory.Repositories;
 using Domain.Repositories;
 using Application.Service;
+using Infrastructure.Db;
+using Infrastructure.Db.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<InMemoryPatientRepositorySeeder>();
-builder.Services.AddSingleton<IPatientRepository, InMemoryPatientRepository>();
-builder.Services.AddSingleton<PatientService>();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+    ));
 
-builder.Services.AddSingleton<InMemoryDoctorRepositorySeeder>();
-builder.Services.AddSingleton<IDoctorRepository, InMemoryDoctorRepository>();
-builder.Services.AddSingleton<DoctorService>();
+builder.Services.AddScoped<IDoctorRepository, DbDoctorRepository>();
+builder.Services.AddScoped<IPatientRepository, DbPatientRepository>();
+builder.Services.AddScoped<IVisitRepository, DbVisitRepository>();
 
-builder.Services.AddSingleton<InMemoryVisitRepositorySeeder>();
-builder.Services.AddSingleton<IVisitRepository, InMemoryVisitRepository>();
-builder.Services.AddSingleton<VisitService>();
+builder.Services.AddScoped<DoctorService>();
+builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<VisitService>();
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,7 +39,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
 

@@ -9,10 +9,21 @@ public class Visit
     /// Field representing the id number of visit
     /// </summary>
     public required int Id { get; set; }
+
+    /// <summary>
+    /// Id of Patient
+    /// </summary>
+    public required int PatientId { get; set; }
+
     /// <summary>
     /// Field representing the patient scheduled for the appointment
     /// </summary>
     public required Patient Patient { get; set; }
+
+    /// <summary>
+    /// Id of Doctor
+    /// </summary>
+    public required int DoctorId { get; set; }
 
     /// <summary>
     /// Field representing the doctor assigned to the appointment

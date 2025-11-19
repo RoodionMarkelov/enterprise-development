@@ -33,7 +33,9 @@ public class VisitService(IVisitRepository repository, IPatientRepository patien
         return new Visit
         {
             Id = 0,
+            PatientId = patient.Id,
             Patient = patient,
+            DoctorId = doctor.Id,
             Doctor = doctor,
             DateOfVisit = entity.DateOfVisit,
             NumberOfCabinet = entity.NumberOfCabinet,
