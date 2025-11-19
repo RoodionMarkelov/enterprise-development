@@ -236,7 +236,7 @@ public class PolyclinicFixture
     /// </summary>
     public List<Visit> Visits =>
     [
-        new()
+    new()
     {
         Id = 1,
         Patient = Patients[0],
