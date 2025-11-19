@@ -3,8 +3,21 @@ using Application.Service;
 using Infrastructure.Db;
 using Infrastructure.Db.Repositories;
 using Microsoft.EntityFrameworkCore;
+using ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
@@ -22,7 +35,15 @@ builder.Services.AddScoped<VisitService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    var basePath = AppContext.BaseDirectory;
+
+    options.IncludeXmlComments(Path.Combine(basePath,"Api.xml"));
+    options.IncludeXmlComments(Path.Combine(basePath,"Domain.xml"));
+    options.IncludeXmlComments(Path.Combine(basePath,"Application.xml"));
+});
 
 var app = builder.Build();
 

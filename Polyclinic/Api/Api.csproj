@@ -27,6 +27,7 @@
     <ProjectReference Include="..\Infrastructure.Db\Infrastructure.Db.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.InMemory.csproj" />
     <ProjectReference Include="..\Polyclinic.Domain\Domain.csproj" />
+    <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
