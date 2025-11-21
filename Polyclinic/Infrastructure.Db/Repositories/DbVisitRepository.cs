@@ -16,12 +16,12 @@ public class DbVisitRepository(AppDbContext dbContext) : IVisitRepository
 
     public List<Visit> Read()
     {
-        return [.. dbContext.Visits];
+        return [.. dbContext.Visits.Include(v => v.Doctor).Include(v => v.Patient)];
     }
 
     public Visit? Read(int id)
     {
-        return dbContext.Visits.FirstOrDefault(p => p.Id == id);
+        return dbContext.Visits.Include(v => v.Doctor).Include(v => v.Patient).FirstOrDefault(p => p.Id == id);
     }
 
     public Visit? Update(int id, Visit entity)
