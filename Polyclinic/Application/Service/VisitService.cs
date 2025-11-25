@@ -7,28 +7,26 @@ namespace Application.Service;
 /// <summary>
 /// Service for managing visit operations including creation, retrieval, updating, deletion and specialized queries
 /// </summary>
-/// <param name="repository"></param>
-/// <param name="patientRepository"></param>
-/// <param name="doctorRepository"></param>
-public class VisitService(IVisitRepository repository, IPatientRepository patientRepository, IDoctorRepository doctorRepository)
+/// <param name="repository">Visit repository instance</param>
+/// <param name="patientRepository">Patient repository instance</param>
+/// <param name="doctorRepository">Doctor repository instance</param>
+public class VisitService(IRepository<Visit> repository, IRepository<Patient> patientRepository, IRepository<Doctor> doctorRepository) : IVisitService
 {
     /// <summary>
     /// Maps VisitDto to Visit entity with validation of patient and doctor existence
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="patientRepository"></param>
-    /// <param name="doctorRepository"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    private static Visit MapDto(VisitDto entity, IPatientRepository patientRepository, IDoctorRepository doctorRepository)
+    /// <param name="entity">Visit data transfer object</param>
+    /// <returns>Mapped Visit entity</returns>
+    /// <exception cref="ArgumentException">Thrown when patient or doctor not found</exception>
+    private async Task<Visit> MapDtoAsync(VisitDto entity)
     {
-        var patient = patientRepository.Read(entity.Patient.Passport);
+        var patient = await patientRepository.ReadAsync(entity.PatientId);
         if (patient == null)
-            throw new ArgumentException($"Patient with passport {entity.Patient.Passport} not found");
+            throw new ArgumentException($"Patient with id {entity.PatientId} not found");
 
-        var doctor = doctorRepository.Read(entity.Doctor.Passport);
+        var doctor = await doctorRepository.ReadAsync(entity.DoctorId);
         if (doctor == null)
-            throw new ArgumentException($"Doctor with passport {entity.Doctor.Passport} not found");
+            throw new ArgumentException($"Doctor with id {entity.DoctorId} not found");
 
         return new Visit
         {
@@ -46,61 +44,63 @@ public class VisitService(IVisitRepository repository, IPatientRepository patien
     /// <summary>
     /// Creates a new visit from DTO data with patient and doctor validation
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
-    public int CreateVisit(VisitDto entity)
+    /// <param name="entity">Visit data transfer object</param>
+    /// <returns>ID of the created visit</returns>
+    public async Task<int> CreateVisit(VisitDto entity)
     {
-        return repository.Create(MapDto(entity, patientRepository, doctorRepository));
+        var visit = await MapDtoAsync(entity);
+        return await repository.CreateAsync(visit);
     }
 
     /// <summary>
     /// Retrieves all visits from the repository
     /// </summary>
-    /// <returns></returns>
-    public List<Visit> GetAllVisits()
+    /// <returns>List of all visits</returns>
+    public Task<List<Visit>> GetAllVisits()
     {
-        return repository.Read();
+        return repository.ReadAsync();
     }
 
     /// <summary>
     /// Retrieves a specific visit by ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public Visit? GetVisit(int id)
+    /// <param name="id">Visit ID</param>
+    /// <returns>Visit or null if not found</returns>
+    public Task<Visit?> GetVisit(int id)
     {
-        return repository.Read(id);
+        return repository.ReadAsync(id);
     }
 
     /// <summary>
     /// Updates an existing visit's information
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="entity"></param>
-    /// <returns></returns>
-    public Visit? UpdateVisit(int id, Visit entity)
+    /// <param name="id">Visit ID</param>
+    /// <param name="entity">Updated visit data</param>
+    /// <returns>Updated visit or null if not found</returns>
+    public Task<Visit?> UpdateVisit(int id, Visit entity)
     {
-        return repository.Update(id, entity);
+        return repository.UpdateAsync(id, entity);
     }
 
     /// <summary>
     /// Deletes a visit by ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public bool DeleteVisit(int id)
+    /// <param name="id">Visit ID</param>
+    /// <returns>True if deleted successfully, false if not found</returns>
+    public Task<bool> DeleteVisit(int id)
     {
-        return repository.Delete(id);
+        return repository.DeleteAsync(id);
     }
 
     /// <summary>
     /// Gets patients visited by specific doctor ordered by patient name
     /// </summary>
-    /// <param name="doctorId"></param>
-    /// <returns></returns>
-    public List<Patient> GetVisitsByDoctorOrderedByPatientName(int doctorId)
+    /// <param name="doctorId">Doctor ID</param>
+    /// <returns>List of patients ordered by name</returns>
+    public async Task<List<Patient>> GetVisitsByDoctorOrderedByPatientName(int doctorId)
     {
-        return repository.Read()
+        var visits = await repository.ReadAsync();
+        return visits
             .Where(v => v.Doctor.Id == doctorId)
             .Select(v => v.Patient)
             .OrderBy(p => p.Name)
@@ -110,46 +110,52 @@ public class VisitService(IVisitRepository repository, IPatientRepository patien
     /// <summary>
     /// Counts repeat visits within specified date range
     /// </summary>
-    /// <param name="startDate"></param>
-    /// <param name="endDate"></param>
-    /// <returns></returns>
-    public int GetCountOfRepeatVisitsForRangeOfDate(DateTime startDate, DateTime endDate)
+    /// <param name="startDate">Start date of the range</param>
+    /// <param name="endDate">End date of the range</param>
+    /// <returns>Number of repeat visits</returns>
+    public async Task<int> GetCountOfRepeatVisitsForRangeOfDate(DateTime startDate, DateTime endDate)
     {
-        return repository.Read()
-            .Count(v => v.IsAgain && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate);
+        var visits = await repository.ReadAsync();
+        return visits.Count(v => v.IsAgain && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate);
     }
 
     /// <summary>
     /// Gets patients older than 30 who visited more than one doctor, ordered by birthday
     /// </summary>
-    /// <param name="currentDate"></param>
-    /// <returns></returns>
-    public List<Patient> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthday(DateOnly currentDate)
+    /// <param name="currentDate">Current date for age calculation</param>
+    /// <returns>List of filtered patients ordered by birthday</returns>
+    public async Task<List<Patient>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthday(DateOnly currentDate)
     {
-        return repository.Read()
+        var visits = await repository.ReadAsync();
+        var patients = await patientRepository.ReadAsync();
+
+        var result = visits
             .GroupBy(v => v.Patient.Id)
             .Select(g => new
             {
                 PatientId = g.Key,
-                Patient = patientRepository.Read().First(p => p.Id == g.Key),
+                Patient = patients.First(p => p.Id == g.Key),
                 UniqueDoctors = g.Select(v => v.Doctor.Id).Distinct().Count()
             })
             .Where(x => x.Patient.Birthday <= currentDate.AddYears(-30) && x.UniqueDoctors > 1)
             .Select(x => x.Patient)
             .OrderBy(p => p.Birthday)
             .ToList();
+
+        return result;
     }
 
     /// <summary>
     /// Gets all visits for specific date range in selected cabinet
     /// </summary>
-    /// <param name="startDate"></param>
-    /// <param name="endDate"></param>
-    /// <param name="cabinet"></param>
-    /// <returns></returns>
-    public List<Visit> GetAllVisitsForDateInSelectedCabinet(DateTime startDate, DateTime endDate, string cabinet)
+    /// <param name="startDate">Start date of the range</param>
+    /// <param name="endDate">End date of the range</param>
+    /// <param name="cabinet">Cabinet number</param>
+    /// <returns>List of filtered visits</returns>
+    public async Task<List<Visit>> GetAllVisitsForDateInSelectedCabinet(DateTime startDate, DateTime endDate, string cabinet)
     {
-        return repository.Read()
+        var visits = await repository.ReadAsync();
+        return visits
             .Where(v => v.NumberOfCabinet == cabinet && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate)
             .ToList();
     }

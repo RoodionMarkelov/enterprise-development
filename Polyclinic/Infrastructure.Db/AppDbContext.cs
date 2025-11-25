@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain;
-using Infrastructure.Db.Seeders;
+using Domain.Seeder;
+
 
 namespace Infrastructure.Db;
-public class AppDbContext : DbContext
-{
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
-
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+{ 
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Visit> Visits { get; set; }
@@ -17,9 +14,7 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        var patientSeeder = new DbPatientRepositorySeeder();
-        var doctorSeeder = new DbDoctorRepositorySeeder();
-        var visitSeeder = new DbVisitRepositorySeeder(patientSeeder, doctorSeeder);
+        var seeder = new DataSeeder();
 
         modelBuilder.Entity<Patient>(builder =>
         {
@@ -29,7 +24,7 @@ public class AppDbContext : DbContext
             builder.Property(p => p.Phone).IsRequired().HasMaxLength(15);
             builder.Property(p => p.Address).HasMaxLength(200);
 
-            builder.HasData(patientSeeder.Patients);
+            builder.HasData(seeder.Patients);
         });
 
         modelBuilder.Entity<Doctor>(builder =>
@@ -38,7 +33,7 @@ public class AppDbContext : DbContext
             builder.Property(d => d.Passport).IsRequired().HasMaxLength(20);
             builder.Property(d => d.Name).IsRequired().HasMaxLength(100);
 
-            builder.HasData(doctorSeeder.Doctors);
+            builder.HasData(seeder.Doctors);
         });
 
         modelBuilder.Entity<Visit>(builder =>
@@ -57,7 +52,7 @@ public class AppDbContext : DbContext
                    .HasForeignKey(v => v.DoctorId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasData(visitSeeder.Visits);
+            builder.HasData(seeder.Visits);
         });
     }
 }

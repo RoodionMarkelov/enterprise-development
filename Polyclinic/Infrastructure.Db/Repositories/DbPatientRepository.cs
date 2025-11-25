@@ -1,36 +1,55 @@
 ﻿using Domain;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Db.Repositories;
-public class DbPatientRepository(AppDbContext dbContext) : IPatientRepository
+
+/// <summary>
+/// Database repository implementation for Patient entities using Entity Framework
+/// </summary>
+/// <param name="dbContext">Database context for data access</param>
+public class DbPatientRepository(AppDbContext dbContext) : IRepository<Patient>
 {
-    public int Create(Patient entity)
+    /// <summary>
+    /// Creates a new patient entity in the database
+    /// </summary>
+    /// <param name="entity">Patient entity to create</param>
+    /// <returns>ID of the created patient</returns>
+    public async Task<int> CreateAsync(Patient entity)
     {
-        var entry = dbContext.Patients.Add(entity);
-
-        dbContext.SaveChanges();
-
+        var entry = await dbContext.Patients.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
         return entry.Entity.Id;
     }
 
-    public List<Patient> Read()
+    /// <summary>
+    /// Retrieves all patients from the database
+    /// </summary>
+    /// <returns>List of all patients</returns>
+    public async Task<List<Patient>> ReadAsync()
     {
-        return [..dbContext.Patients];
+        return await dbContext.Patients.ToListAsync();
     }
 
-    public Patient? Read(string passport)
+    /// <summary>
+    /// Retrieves a patient by ID from the database
+    /// </summary>
+    /// <param name="id">Patient ID</param>
+    /// <returns>Patient entity or null if not found</returns>
+    public async Task<Patient?> ReadAsync(int id)
     {
-        return dbContext.Patients.FirstOrDefault(p => p.Passport == passport);
+        return await dbContext.Patients.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Patient? Read(int id)
+    /// <summary>
+    /// Updates an existing patient entity in the database
+    /// </summary>
+    /// <param name="id">Patient ID</param>
+    /// <param name="entity">Updated patient data</param>
+    /// <returns>Updated patient entity or null if not found</returns>
+    public async Task<Patient?> UpdateAsync(int id, Patient entity)
     {
-        return dbContext.Patients.FirstOrDefault(p => p.Id == id);
-    }
-
-    public Patient? Update(int id, Patient entity)
-    {
-        var patient = Read(id);
+        var patient = await ReadAsync(id);
         if (patient == null) return null;
 
         patient.Passport = entity.Passport;
@@ -42,20 +61,22 @@ public class DbPatientRepository(AppDbContext dbContext) : IPatientRepository
         patient.RhFactor = entity.RhFactor;
         patient.Phone = entity.Phone;
 
-        dbContext.SaveChanges();
-
+        await dbContext.SaveChangesAsync();
         return patient;
     }
 
-    public bool Delete(int id)
+    /// <summary>
+    /// Deletes a patient entity from the database
+    /// </summary>
+    /// <param name="id">Patient ID</param>
+    /// <returns>True if deleted successfully, false if not found</returns>
+    public async Task<bool> DeleteAsync(int id)
     {
-        var patient = Read(id);
-
+        var patient = await ReadAsync(id);
         if (patient == null) return false;
 
         dbContext.Patients.Remove(patient);
-        dbContext.SaveChanges();
-
+        await dbContext.SaveChangesAsync();
         return true;
     }
 }

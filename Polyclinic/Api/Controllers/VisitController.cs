@@ -80,13 +80,11 @@ public class VisitController(VisitService service, ILogger<VisitController> logg
     /// <param name="id">Id of visit</param>
     /// <returns>True if delete</returns>
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult<bool> DeleteVisit(int id)
     {
         logger.LogInformation("Visit with {id} was deleted", id);
         var isDelete = service.DeleteVisit(id);
-        if (isDelete) return Ok(true);
-        return NotFound();
+        return NoContent();
     }
 }

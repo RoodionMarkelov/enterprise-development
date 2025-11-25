@@ -1,59 +1,101 @@
 ﻿using Domain;
 using Domain.Repositories;
-using Infrastructure.InMemory.Seeders;
+using Domain.Seeder;
 
 namespace Infrastructure.InMemory.Repositories;
-public class InMemoryVisitRepository : IVisitRepository
+
+/// <summary>
+/// In-memory repository implementation for Visit entities with data seeding support
+/// </summary>
+/// <param name="seeder">Optional data seeder for initial population</param>
+public class InMemoryVisitRepository : IRepository<Visit>
 {
     private readonly List<Visit> _items = [];
-    
     private int _currentId = 1;
 
-    public InMemoryVisitRepository(InMemoryVisitRepositorySeeder? seeder)
+    /// <summary>
+    /// Initializes a new instance of the in-memory visit repository
+    /// </summary>
+    /// <param name="seeder">Optional data seeder for initial population</param>
+    public InMemoryVisitRepository(DataSeeder? seeder)
     {
         if (seeder == null) return;
 
-        _items = seeder.GetItems();
-        _currentId = seeder.GetCurrentId();
+        _items = seeder.Visits;
+        _currentId = seeder.Visits.Count();
     }
 
-    public int Create(Visit entity)
+    /// <summary>
+    /// Creates a new visit entity in memory
+    /// </summary>
+    /// <param name="entity">Visit entity to create</param>
+    /// <returns>ID of the created visit</returns>
+    public async Task<int> CreateAsync(Visit entity)
     {
-        entity.Id = _currentId;
-        _items.Add(entity);
-        return entity.Id;
+        return await Task.Run(() =>
+        {
+            entity.Id = _currentId;
+            _items.Add(entity);
+            ++_currentId;
+            return entity.Id;
+        });
     }
 
-    public List<Visit> Read()
+    /// <summary>
+    /// Retrieves all visits from memory
+    /// </summary>
+    /// <returns>List of all visits</returns>
+    public async Task<List<Visit>> ReadAsync()
     {
-        return _items;
+        return await Task.Run(() => _items);
     }
 
-    public Visit? Read(int id)
+    /// <summary>
+    /// Retrieves a visit by ID from memory
+    /// </summary>
+    /// <param name="id">Visit ID</param>
+    /// <returns>Visit entity or null if not found</returns>
+    public async Task<Visit?> ReadAsync(int id)
     {
-        return _items.FirstOrDefault(item => item.Id == id);
+        return await Task.Run(() => _items.FirstOrDefault(item => item.Id == id));
     }
 
-    public Visit? Update(int id, Visit entity)
+    /// <summary>
+    /// Updates an existing visit entity in memory
+    /// </summary>
+    /// <param name="id">Visit ID</param>
+    /// <param name="entity">Updated visit data</param>
+    /// <returns>Updated visit entity or null if not found</returns>
+    public async Task<Visit?> UpdateAsync(int id, Visit entity)
     {
-        var existingEntity = Read(id);
-        if (existingEntity == null) return null;
+        return await Task.Run(() =>
+        {
+            var existingEntity = _items.FirstOrDefault(item => item.Id == id);
+            if (existingEntity == null) return null;
 
-        existingEntity.Patient = entity.Patient;
-        existingEntity.Doctor = entity.Doctor;
-        existingEntity.DateOfVisit = entity.DateOfVisit;
-        existingEntity.NumberOfCabinet = entity.NumberOfCabinet;
-        existingEntity.IsAgain = entity.IsAgain;
+            existingEntity.Patient = entity.Patient;
+            existingEntity.Doctor = entity.Doctor;
+            existingEntity.DateOfVisit = entity.DateOfVisit;
+            existingEntity.NumberOfCabinet = entity.NumberOfCabinet;
+            existingEntity.IsAgain = entity.IsAgain;
 
-        return existingEntity;
+            return existingEntity;
+        });
     }
 
-    public bool Delete(int id)
+    /// <summary>
+    /// Deletes a visit entity from memory
+    /// </summary>
+    /// <param name="id">Visit ID</param>
+    /// <returns>True if deleted successfully, false if not found</returns>
+    public async Task<bool> DeleteAsync(int id)
     {
-        var existingEntity = Read(id);
-        if (existingEntity == null) return false;
+        return await Task.Run(() =>
+        {
+            var existingEntity = _items.FirstOrDefault(item => item.Id == id);
+            if (existingEntity == null) return false;
 
-        _items.Remove(existingEntity);
-        return true;
+            return _items.Remove(existingEntity);
+        });
     }
 }

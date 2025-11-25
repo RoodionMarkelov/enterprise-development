@@ -1,4 +1,6 @@
-﻿namespace Application.DTO;
+﻿using Domain;
+
+namespace Application.DTO;
 
 /// <summary>
 /// Class describing a patient's visit to the polyclinic
@@ -8,12 +10,12 @@ public class VisitDto
     /// <summary>
     /// Field representing the patient scheduled for the appointment
     /// </summary>
-    public required PatientDto Patient { get; set; }
+    public required int PatientId { get; set; }
 
     /// <summary>
     /// Field representing the doctor assigned to the appointment
     /// </summary>
-    public required DoctorDto Doctor { get; set; }
+    public required int DoctorId { get; set; }
 
     /// <summary>
     /// Field representing the date of the patient's appointment

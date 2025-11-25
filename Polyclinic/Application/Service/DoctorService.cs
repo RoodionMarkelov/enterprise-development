@@ -7,14 +7,14 @@ namespace Application.Service;
 /// <summary>
 /// Service for managing doctor operations including creation, retrieval, updating, and deletion
 /// </summary>
-/// <param name="repository"></param>
-public class DoctorService(IDoctorRepository repository)
+/// <param name="doctorRepository">Doctor repository instance</param>
+public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorService
 {
     /// <summary>
     /// Maps DoctorDto to Doctor entity with default ID
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
+    /// <param name="entity">Doctor data transfer object</param>
+    /// <returns>Mapped Doctor entity</returns>
     private static Doctor MapDto(DoctorDto entity)
     {
         return new Doctor
@@ -31,62 +31,61 @@ public class DoctorService(IDoctorRepository repository)
     /// <summary>
     /// Creates a new doctor from DTO data
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
-    public int CreateDoctor(DoctorDto entity)
+    /// <param name="entity">Doctor data transfer object</param>
+    /// <returns>ID of the created doctor</returns>
+    public async Task<int> CreateDoctorAsync(DoctorDto entity)
     {
-        return repository.Create(MapDto(entity));
+        return await doctorRepository.CreateAsync(MapDto(entity));
     }
 
     /// <summary>
     /// Retrieves all doctors from the repository
     /// </summary>
-    /// <returns></returns>
-    public List<Doctor> GetAllDoctors()
+    /// <returns>List of all doctors</returns>
+    public async Task<List<Doctor>> GetAllDoctorsAsync()
     {
-        return repository.Read();
+        return await doctorRepository.ReadAsync();
     }
 
     /// <summary>
     /// Gets doctors with work experience greater than or equal to target
     /// </summary>
-    /// <param name="targetWorkExperience"></param>
-    /// <returns></returns>
-    public List<Doctor> GetAllWhithWorkExperienceMoreTarget(int targetWorkExperience)
+    /// <param name="targetWorkExperience">Minimum work experience in years</param>
+    /// <returns>List of filtered doctors</returns>
+    public async Task<List<Doctor>> GetAllWithWorkExperienceMoreTargetAsync(int targetWorkExperience)
     {
-        return repository.Read()
-           .Where(d => d.WorkExperience >= targetWorkExperience)
-           .ToList();
+        var doctors = await doctorRepository.ReadAsync();
+        return doctors.Where(d => d.WorkExperience >= targetWorkExperience).ToList();
     }
 
     /// <summary>
     /// Retrieves a specific doctor by ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public Doctor? GetDoctor(int id)
+    /// <param name="id">Doctor ID</param>
+    /// <returns>Doctor entity or null if not found</returns>
+    public async Task<Doctor?> GetDoctorAsync(int id)
     {
-        return repository.Read(id);
+        return await doctorRepository.ReadAsync(id);
     }
 
     /// <summary>
     /// Updates an existing doctor's information
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="entity"></param>
-    /// <returns></returns>
-    public Doctor? UpdateDoctor(int id, Doctor entity)
+    /// <param name="id">Doctor ID</param>
+    /// <param name="entity">Updated doctor data</param>
+    /// <returns>Updated doctor entity or null if not found</returns>
+    public async Task<Doctor?> UpdateDoctorAsync(int id, Doctor entity)
     {
-        return repository.Update(id, entity);
+        return await doctorRepository.UpdateAsync(id, entity);
     }
 
     /// <summary>
     /// Deletes a doctor by ID
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public bool DeleteDoctor(int id)
+    /// <param name="id">Doctor ID</param>
+    /// <returns>True if deleted successfully, false if not found</returns>
+    public async Task<bool> DeleteDoctorAsync(int id)
     {
-        return repository.Delete(id);
+        return await doctorRepository.DeleteAsync(id);
     }
 }

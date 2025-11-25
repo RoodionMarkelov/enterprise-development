@@ -7,8 +7,8 @@ namespace Application.Service;
 /// <summary>
 /// Service for managing patient operations including creation, retrieval, updating, and deletion
 /// </summary>
-/// <param name="repository"></param>
-public class PatientService(IPatientRepository repository)
+/// <param name="patientRepository"></param>
+public class PatientService(IRepository<Patient> patientRepository) : IPatientService
 {
     /// <summary>
     /// Maps PatientDto to Patient entity with default ID
@@ -36,18 +36,18 @@ public class PatientService(IPatientRepository repository)
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public int CreatePatient(PatientDto entity)
+    public Task<int> CreatePatient(PatientDto entity)
     {
-        return repository.Create(MapDto(entity));
+        return patientRepository.CreateAsync(MapDto(entity));
     }
 
     /// <summary>
     /// Retrieves all patients from the repository
     /// </summary>
     /// <returns></returns>
-    public List<Patient> GetAllPatients()
+    public Task<List<Patient>> GetAllPatients()
     {
-        return repository.Read();
+        return patientRepository.ReadAsync();
     }
 
     /// <summary>
@@ -55,9 +55,9 @@ public class PatientService(IPatientRepository repository)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Patient? GetPatient(int id)
+    public Task<Patient?> GetPatient(int id)
     {
-        return repository.Read(id);
+        return patientRepository.ReadAsync(id);
     }
 
     /// <summary>
@@ -66,9 +66,9 @@ public class PatientService(IPatientRepository repository)
     /// <param name="id"></param>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public Patient? UpdatePatient(int id, Patient entity)
+    public Task<Patient?> UpdatePatient(int id, Patient entity)
     {
-        return repository.Update(id, entity);
+        return patientRepository.UpdateAsync(id, entity);
     }
 
     /// <summary>
@@ -76,8 +76,8 @@ public class PatientService(IPatientRepository repository)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public bool DeletePatient(int id)
+    public Task<bool> DeletePatient(int id)
     {
-        return repository.Delete(id);
+        return patientRepository.DeleteAsync(id);
     }
 }

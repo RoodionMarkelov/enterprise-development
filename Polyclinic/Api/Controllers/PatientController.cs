@@ -54,7 +54,7 @@ public class PatientController(PatientService service, ILogger<PatientController
     {
         logger.LogInformation("Creating a patient with the name {fio}", patient.Name);
         var id = service.CreatePatient(patient);
-        return Created($"/patient/{id}", id); 
+        return Created($"/patient/{id}", id);
     }
 
     /// <summary>
@@ -79,14 +79,12 @@ public class PatientController(PatientService service, ILogger<PatientController
     /// </summary>
     /// <param name="id">Id of patient</param>
     /// <returns>True if delete</returns>
-    [HttpDelete("{id}")] 
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult<bool> DeletePatient(int id)
     {
         logger.LogInformation("Patient with {id} was deleted", id);
         var isDelete = service.DeletePatient(id);
-        if (isDelete) return Ok(true);
-        return NotFound();
+        return NoContent();
     }
 }

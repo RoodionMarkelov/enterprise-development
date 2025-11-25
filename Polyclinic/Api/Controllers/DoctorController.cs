@@ -80,13 +80,11 @@ public class DoctorController(DoctorService service, ILogger<DoctorController> l
     /// <param name="id">Id of doctor</param>
     /// <returns>True if delete</returns>
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult<bool> DeleteDoctor(int id)
     {
         logger.LogInformation("Doctor with {id} was deleted", id);
         var isDelete = service.DeleteDoctor(id);
-        if (isDelete) return Ok(true);
-        return NotFound();
+        return NoContent();
     }
 }

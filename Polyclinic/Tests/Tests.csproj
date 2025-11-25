@@ -20,7 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.InMemory\Infrastructure.InMemory.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.InMemory.csproj" />
     <ProjectReference Include="..\Polyclinic.Domain\Domain.csproj" />
   </ItemGroup>
 

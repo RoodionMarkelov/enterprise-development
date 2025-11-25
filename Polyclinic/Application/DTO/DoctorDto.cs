@@ -1,5 +1,6 @@
-﻿namespace Application.DTO;
-using Domain;
+﻿using Domain;
+
+namespace Application.DTO;
 
 /// <summary>
 /// Class describing a doctor

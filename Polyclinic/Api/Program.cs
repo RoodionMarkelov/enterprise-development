@@ -4,6 +4,7 @@ using Infrastructure.Db;
 using Infrastructure.Db.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ServiceDefaults;
+using Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,13 +26,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
     ));
 
-builder.Services.AddScoped<IDoctorRepository, DbDoctorRepository>();
-builder.Services.AddScoped<IPatientRepository, DbPatientRepository>();
-builder.Services.AddScoped<IVisitRepository, DbVisitRepository>();
+builder.Services.AddScoped<IRepository<Doctor>, DbDoctorRepository>();
+builder.Services.AddScoped<IRepository<Patient>, DbPatientRepository>();
+builder.Services.AddScoped<IRepository<Visit>, DbVisitRepository>();
 
-builder.Services.AddScoped<DoctorService>();
-builder.Services.AddScoped<PatientService>();
-builder.Services.AddScoped<VisitService>();
+builder.Services.AddScoped<DbDoctorRepository>();
+builder.Services.AddScoped<DbPatientRepository>();
+builder.Services.AddScoped<DbVisitRepository>();
+
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IVisitService, VisitService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -3,30 +3,59 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Db.Repositories;
-public class DbVisitRepository(AppDbContext dbContext) : IVisitRepository
+
+/// <summary>
+/// Database repository implementation for Visit entities using Entity Framework
+/// </summary>
+/// <param name="dbContext">Database context for data access</param>
+public class DbVisitRepository(AppDbContext dbContext) : IRepository<Visit>
 {
-    public int Create(Visit entity)
+    /// <summary>
+    /// Creates a new visit entity in the database
+    /// </summary>
+    /// <param name="entity">Visit entity to create</param>
+    /// <returns>ID of the created visit</returns>
+    public async Task<int> CreateAsync(Visit entity)
     {
-        var entry = dbContext.Visits.Add(entity);
-
-        dbContext.SaveChanges();
-
+        var entry = await dbContext.Visits.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
         return entry.Entity.Id;
     }
 
-    public List<Visit> Read()
+    /// <summary>
+    /// Retrieves all visits from the database with included Doctor and Patient entities
+    /// </summary>
+    /// <returns>List of all visits with related entities</returns>
+    public async Task<List<Visit>> ReadAsync()
     {
-        return [.. dbContext.Visits.Include(v => v.Doctor).Include(v => v.Patient)];
+        return await dbContext.Visits
+            .Include(v => v.Doctor)
+            .Include(v => v.Patient)
+            .ToListAsync();
     }
 
-    public Visit? Read(int id)
+    /// <summary>
+    /// Retrieves a visit by ID from the database with included Doctor and Patient entities
+    /// </summary>
+    /// <param name="id">Visit ID</param>
+    /// <returns>Visit entity or null if not found</returns>
+    public async Task<Visit?> ReadAsync(int id)
     {
-        return dbContext.Visits.Include(v => v.Doctor).Include(v => v.Patient).FirstOrDefault(p => p.Id == id);
+        return await dbContext.Visits
+            .Include(v => v.Doctor)
+            .Include(v => v.Patient)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Visit? Update(int id, Visit entity)
+    /// <summary>
+    /// Updates an existing visit entity in the database
+    /// </summary>
+    /// <param name="id">Visit ID</param>
+    /// <param name="entity">Updated visit data</param>
+    /// <returns>Updated visit entity or null if not found</returns>
+    public async Task<Visit?> UpdateAsync(int id, Visit entity)
     {
-        var visit = Read(id);
+        var visit = await ReadAsync(id);
         if (visit == null) return null;
 
         visit.Patient = entity.Patient;
@@ -35,20 +64,22 @@ public class DbVisitRepository(AppDbContext dbContext) : IVisitRepository
         visit.NumberOfCabinet = entity.NumberOfCabinet;
         visit.IsAgain = entity.IsAgain;
 
-        dbContext.SaveChanges();
-
+        await dbContext.SaveChangesAsync();
         return visit;
     }
 
-    public bool Delete(int id)
+    /// <summary>
+    /// Deletes a visit entity from the database
+    /// </summary>
+    /// <param name="id">Visit ID</param>
+    /// <returns>True if deleted successfully, false if not found</returns>
+    public async Task<bool> DeleteAsync(int id)
     {
-        var visit = Read(id);
-
+        var visit = await ReadAsync(id);
         if (visit == null) return false;
 
         dbContext.Visits.Remove(visit);
-        dbContext.SaveChanges();
-
+        await dbContext.SaveChangesAsync();
         return true;
     }
 }

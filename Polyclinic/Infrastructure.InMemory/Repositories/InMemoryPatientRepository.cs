@@ -1,67 +1,104 @@
 ﻿using Domain;
 using Domain.Repositories;
-using Infrastructure.InMemory.Seeders;
+using Domain.Seeder;
 
 namespace Infrastructure.InMemory.Repositories;
-public class InMemoryPatientRepository : IPatientRepository
+
+/// <summary>
+/// In-memory repository implementation for Patient entities with data seeding support
+/// </summary>
+/// <param name="seeder">Optional data seeder for initial population</param>
+public class InMemoryPatientRepository : IRepository<Patient>
 {
     private readonly List<Patient> _items = [];
-    
     private int _currentId = 1;
 
-    public InMemoryPatientRepository(InMemoryPatientRepositorySeeder? seeder)
+    /// <summary>
+    /// Initializes a new instance of the in-memory patient repository
+    /// </summary>
+    /// <param name="seeder">Optional data seeder for initial population</param>
+    public InMemoryPatientRepository(DataSeeder? seeder)
     {
         if (seeder == null) return;
 
-        _items = seeder.GetItems();
-        _currentId = seeder.GetCurrentId();
+        _items = seeder.Patients;
+        _currentId = seeder.Patients.Count();
     }
 
-    public int Create(Patient entity)
+    /// <summary>
+    /// Creates a new patient entity in memory
+    /// </summary>
+    /// <param name="entity">Patient entity to create</param>
+    /// <returns>ID of the created patient</returns>
+    public async Task<int> CreateAsync(Patient entity)
     {
-        entity.Id = _currentId;
-        _items.Add(entity);
-        return entity.Id;
+        return await Task.Run(() =>
+        {
+            entity.Id = _currentId;
+            _items.Add(entity);
+            ++_currentId;
+            return entity.Id;
+        });
     }
 
-    public List<Patient> Read()
+    /// <summary>
+    /// Retrieves all patients from memory
+    /// </summary>
+    /// <returns>List of all patients</returns>
+    public async Task<List<Patient>> ReadAsync()
     {
-        return _items;
+        return await Task.Run(() => _items);
     }
 
-    public Patient? Read(string passport)
+    /// <summary>
+    /// Retrieves a patient by ID from memory
+    /// </summary>
+    /// <param name="id">Patient ID</param>
+    /// <returns>Patient entity or null if not found</returns>
+    public async Task<Patient?> ReadAsync(int id)
     {
-        return _items.FirstOrDefault(item => item.Passport == passport);
+        return await Task.Run(() => _items.FirstOrDefault(item => item.Id == id));
     }
 
-    public Patient? Read(int id)
+    /// <summary>
+    /// Updates an existing patient entity in memory
+    /// </summary>
+    /// <param name="id">Patient ID</param>
+    /// <param name="entity">Updated patient data</param>
+    /// <returns>Updated patient entity or null if not found</returns>
+    public async Task<Patient?> UpdateAsync(int id, Patient entity)
     {
-        return _items.FirstOrDefault(item => item.Id == id);
+        return await Task.Run(() =>
+        {
+            var existingEntity = _items.FirstOrDefault(item => item.Id == id);
+            if (existingEntity == null) return null;
+
+            existingEntity.Passport = entity.Passport;
+            existingEntity.Name = entity.Name;
+            existingEntity.Gender = entity.Gender;
+            existingEntity.Birthday = entity.Birthday;
+            existingEntity.Address = entity.Address;
+            existingEntity.BloodGroup = entity.BloodGroup;
+            existingEntity.RhFactor = entity.RhFactor;
+            existingEntity.Phone = entity.Phone;
+
+            return existingEntity;
+        });
     }
 
-    public Patient? Update(int id, Patient entity)
+    /// <summary>
+    /// Deletes a patient entity from memory
+    /// </summary>
+    /// <param name="id">Patient ID</param>
+    /// <returns>True if deleted successfully, false if not found</returns>
+    public async Task<bool> DeleteAsync(int id)
     {
-        var existingEntity = Read(id);
-        if (existingEntity == null) return null;
+        return await Task.Run(() =>
+        {
+            var existingEntity = _items.FirstOrDefault(item => item.Id == id);
+            if (existingEntity == null) return false;
 
-        existingEntity.Passport = entity.Passport;
-        existingEntity.Name = entity.Name;
-        existingEntity.Gender = entity.Gender;
-        existingEntity.Birthday = entity.Birthday;
-        existingEntity.Address = entity.Address;
-        existingEntity.BloodGroup = entity.BloodGroup;
-        existingEntity.RhFactor = entity.RhFactor;
-        existingEntity.Phone = entity.Phone;
-
-        return existingEntity;
-    }
-
-    public bool Delete(int id)
-    {
-        var existingEntity = Read(id);
-        if (existingEntity == null) return false;
-
-        _items.Remove(existingEntity);
-        return true;
+            return _items.Remove(existingEntity);
+        });
     }
 }
