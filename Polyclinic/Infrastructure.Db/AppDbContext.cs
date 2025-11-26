@@ -1,20 +1,42 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain;
-using Infrastructure.Db.Seeder;
+using Domain.Seeder;
 
 
 namespace Infrastructure.Db;
+
+/// <summary>
+/// Database context for the Polyclinic application that represents the session with the database
+/// and provides access to patient, doctor, and visit entities
+/// </summary>
+/// <param name="options">The options to be used by the DbContext</param>
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
-{ 
+{
+    /// <summary>
+    /// Gets or sets the patients database set
+    /// </summary>
     public DbSet<Patient> Patients { get; set; }
+
+    /// <summary>
+    /// Gets or sets the doctors database set
+    /// </summary>
     public DbSet<Doctor> Doctors { get; set; }
+
+    /// <summary>
+    /// Gets or sets the visits database set
+    /// </summary>
     public DbSet<Visit> Visits { get; set; }
 
+    /// <summary>
+    /// Configures the model that was discovered by convention from the entity types
+    /// exposed in DbSet properties on the derived context
+    /// </summary>
+    /// <param name="modelBuilder">The builder being used to construct the model for this context</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        var seeder = new DbSeeder();
+        var seeder = new DataSeeder();
 
         modelBuilder.Entity<Patient>(builder =>
         {

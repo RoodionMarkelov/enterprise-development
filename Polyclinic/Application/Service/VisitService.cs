@@ -15,9 +15,6 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// <summary>
     /// Maps VisitDto to Visit entity with validation of patient and doctor existence
     /// </summary>
-    /// <param name="entity">Visit data transfer object</param>
-    /// <returns>Mapped Visit entity</returns>
-    /// <exception cref="ArgumentException">Thrown when patient or doctor not found</exception>
     private async Task<Visit> MapToDomainAsync(VisitDto entity)
     {
         var patient = await patientRepository.ReadAsync(entity.PatientId);
@@ -31,9 +28,9 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
         return new Visit
         {
             Id = 0,
-            PatientId = patient.Id,
+            PatientId = entity.PatientId, 
             Patient = patient,
-            DoctorId = doctor.Id,
+            DoctorId = entity.DoctorId, 
             Doctor = doctor,
             DateOfVisit = entity.DateOfVisit,
             NumberOfCabinet = entity.NumberOfCabinet,
@@ -41,30 +38,6 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
         };
     }
 
-    /// <summary>
-    /// Maps Visit entity to VisitDto
-    /// </summary>
-    /// <param name="visit">Visit entity</param>
-    /// <returns>Mapped Visit DTO</returns>
-    private static VisitDto MapToDto(Visit visit)
-    {
-        return new VisitDto
-        {
-            PatientId = visit.PatientId,
-            Patient = visit.Patient,
-            DoctorId = visit.DoctorId,
-            Doctor = visit.Doctor,
-            DateOfVisit = visit.DateOfVisit,
-            NumberOfCabinet = visit.NumberOfCabinet,
-            IsAgain = visit.IsAgain
-        };
-    }
-
-    /// <summary>
-    /// Maps Patient entity to PatientDto
-    /// </summary>
-    /// <param name="patient">Patient entity</param>
-    /// <returns>Mapped Patient DTO</returns>
     private static PatientDto MapToPatientDto(Patient patient)
     {
         return new PatientDto
@@ -81,10 +54,25 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     }
 
     /// <summary>
+    /// Maps Visit entity to VisitResponseDto (с полными данными)
+    /// </summary>
+    private static VisitResponseDto MapToResponseDto(Visit visit)
+    {
+        return new VisitResponseDto
+        {
+            PatientId = visit.PatientId,
+            Patient = visit.Patient, 
+            DoctorId = visit.DoctorId,
+            Doctor = visit.Doctor,      
+            DateOfVisit = visit.DateOfVisit,
+            NumberOfCabinet = visit.NumberOfCabinet,
+            IsAgain = visit.IsAgain
+        };
+    }
+
+    /// <summary>
     /// Creates a new visit from DTO data with patient and doctor validation
     /// </summary>
-    /// <param name="entity">Visit data transfer object</param>
-    /// <returns>ID of the created visit</returns>
     public async Task<int> CreateVisitAsync(VisitDto entity)
     {
         var visit = await MapToDomainAsync(entity);
@@ -92,39 +80,31 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     }
 
     /// <summary>
-    /// Retrieves all visits from the repository as DTOs
+    /// Retrieves all visits from the repository as Response DTOs
     /// </summary>
-    /// <returns>List of all visits as DTOs</returns>
-    public async Task<List<VisitDto>> GetAllVisitsAsync()
+    public async Task<List<VisitResponseDto>> GetAllVisitsAsync()
     {
         var visits = await repository.ReadAsync();
-        return visits.Select(MapToDto).ToList();
+        return visits.Select(MapToResponseDto).ToList();
     }
 
     /// <summary>
-    /// Retrieves a specific visit by ID as DTO
+    /// Retrieves a specific visit by ID as Response DTO
     /// </summary>
-    /// <param name="id">Visit ID</param>
-    /// <returns>Visit DTO or null if not found</returns>
-    public async Task<VisitDto?> GetVisitAsync(int id)
+    public async Task<VisitResponseDto?> GetVisitAsync(int id)
     {
         var visit = await repository.ReadAsync(id);
-        return visit != null ? MapToDto(visit) : null;
+        return visit != null ? MapToResponseDto(visit) : null;
     }
 
     /// <summary>
     /// Updates an existing visit's information
     /// </summary>
-    /// <param name="id">Visit ID</param>
-    /// <param name="entity">Updated visit data</param>
-    /// <returns>Updated visit DTO or null if not found</returns>
-    public async Task<VisitDto?> UpdateVisitAsync(int id, VisitDto entity)
+    public async Task<VisitResponseDto?> UpdateVisitAsync(int id, VisitDto entity)
     {
         var visitToUpdate = await MapToDomainAsync(entity);
-        visitToUpdate.Id = id;
-
         var updatedVisit = await repository.UpdateAsync(id, visitToUpdate);
-        return updatedVisit != null ? MapToDto(updatedVisit) : null;
+        return updatedVisit != null ? MapToResponseDto(updatedVisit) : null;
     }
 
     /// <summary>
@@ -199,12 +179,12 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// <param name="endDate">End date of the range</param>
     /// <param name="cabinet">Cabinet number</param>
     /// <returns>List of filtered visits as DTOs</returns>
-    public async Task<List<VisitDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet)
+    public async Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet)
     {
         var visits = await repository.ReadAsync();
         return visits
             .Where(v => v.NumberOfCabinet == cabinet && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate)
-            .Select(MapToDto)
+            .Select(MapToResponseDto)
             .ToList();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Application.DTO;
-using Domain;
 
 namespace Application.Service;
 
@@ -19,14 +18,14 @@ public interface IVisitService
     /// Retrieves all visits from the repository as DTOs
     /// </summary>
     /// <returns>List of all visits as DTOs</returns>
-    public Task<List<VisitDto>> GetAllVisitsAsync();
+    public Task<List<VisitResponseDto>> GetAllVisitsAsync();
 
     /// <summary>
     /// Retrieves a specific visit by ID as DTO
     /// </summary>
     /// <param name="id">Visit ID</param>
     /// <returns>Visit DTO or null if not found</returns>
-    public Task<VisitDto?> GetVisitAsync(int id);
+    public Task<VisitResponseDto?> GetVisitAsync(int id);
 
     /// <summary>
     /// Updates an existing visit's information
@@ -34,7 +33,7 @@ public interface IVisitService
     /// <param name="id">Visit ID</param>
     /// <param name="entity">Updated visit data</param>
     /// <returns>Updated visit DTO or null if not found</returns>
-    public Task<VisitDto?> UpdateVisitAsync(int id, VisitDto entity);
+    public Task<VisitResponseDto?> UpdateVisitAsync(int id, VisitDto entity);
 
     /// <summary>
     /// Deletes a visit by ID
@@ -72,5 +71,5 @@ public interface IVisitService
     /// <param name="endDate">End date of the range</param>
     /// <param name="cabinet">Cabinet number</param>
     /// <returns>List of filtered visits as DTOs</returns>
-    public Task<List<VisitDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet);
+    public Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet);
 }

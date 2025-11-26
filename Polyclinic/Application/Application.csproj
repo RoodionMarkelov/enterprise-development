@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.InMemory\Infrastructure.InMemory.csproj" />
     <ProjectReference Include="..\Polyclinic.Domain\Domain.csproj" />
   </ItemGroup>
 
