@@ -15,7 +15,7 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     /// </summary>
     /// <param name="entity">Doctor data transfer object</param>
     /// <returns>Mapped Doctor entity</returns>
-    private static Doctor MapDto(DoctorDto entity)
+    private static Doctor MapToDomain(DoctorDto entity)
     {
         return new Doctor
         {
@@ -29,43 +29,65 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     }
 
     /// <summary>
+    /// Maps Doctor entity to DoctorDto
+    /// </summary>
+    /// <param name="doctor">Doctor entity</param>
+    /// <returns>Mapped Doctor DTO</returns>
+    private static DoctorDto MapToDto(Doctor doctor)
+    {
+        return new DoctorDto
+        {
+            Passport = doctor.Passport,
+            Name = doctor.Name,
+            Birthday = doctor.Birthday,
+            Specialization = doctor.Specialization,
+            WorkExperience = doctor.WorkExperience,
+        };
+    }
+
+    /// <summary>
     /// Creates a new doctor from DTO data
     /// </summary>
     /// <param name="entity">Doctor data transfer object</param>
     /// <returns>ID of the created doctor</returns>
     public async Task<int> CreateDoctorAsync(DoctorDto entity)
     {
-        return await doctorRepository.CreateAsync(MapDto(entity));
+        return await doctorRepository.CreateAsync(MapToDomain(entity));
     }
 
     /// <summary>
-    /// Retrieves all doctors from the repository
+    /// Retrieves all doctors from the repository as DTOs
     /// </summary>
-    /// <returns>List of all doctors</returns>
-    public async Task<List<Doctor>> GetAllDoctorsAsync()
-    {
-        return await doctorRepository.ReadAsync();
-    }
-
-    /// <summary>
-    /// Gets doctors with work experience greater than or equal to target
-    /// </summary>
-    /// <param name="targetWorkExperience">Minimum work experience in years</param>
-    /// <returns>List of filtered doctors</returns>
-    public async Task<List<Doctor>> GetAllWithWorkExperienceMoreTargetAsync(int targetWorkExperience)
+    /// <returns>List of all doctors as DTOs</returns>
+    public async Task<List<DoctorDto>> GetAllDoctorsAsync()
     {
         var doctors = await doctorRepository.ReadAsync();
-        return doctors.Where(d => d.WorkExperience >= targetWorkExperience).ToList();
+        return doctors.Select(MapToDto).ToList();
     }
 
     /// <summary>
-    /// Retrieves a specific doctor by ID
+    /// Gets doctors with work experience greater than or equal to target as DTOs
+    /// </summary>
+    /// <param name="targetWorkExperience">Minimum work experience in years</param>
+    /// <returns>List of filtered doctors as DTOs</returns>
+    public async Task<List<DoctorDto>> GetAllWithWorkExperienceMoreTargetAsync(int targetWorkExperience)
+    {
+        var doctors = await doctorRepository.ReadAsync();
+        return doctors
+            .Where(d => d.WorkExperience >= targetWorkExperience)
+            .Select(MapToDto)
+            .ToList();
+    }
+
+    /// <summary>
+    /// Retrieves a specific doctor by ID as DTO
     /// </summary>
     /// <param name="id">Doctor ID</param>
-    /// <returns>Doctor entity or null if not found</returns>
-    public async Task<Doctor?> GetDoctorAsync(int id)
+    /// <returns>Doctor DTO or null if not found</returns>
+    public async Task<DoctorDto?> GetDoctorAsync(int id)
     {
-        return await doctorRepository.ReadAsync(id);
+        var doctor = await doctorRepository.ReadAsync(id);
+        return doctor != null ? MapToDto(doctor) : null;
     }
 
     /// <summary>
@@ -73,10 +95,14 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     /// </summary>
     /// <param name="id">Doctor ID</param>
     /// <param name="entity">Updated doctor data</param>
-    /// <returns>Updated doctor entity or null if not found</returns>
-    public async Task<Doctor?> UpdateDoctorAsync(int id, Doctor entity)
+    /// <returns>Updated doctor DTO or null if not found</returns>
+    public async Task<DoctorDto?> UpdateDoctorAsync(int id, DoctorDto entity)
     {
-        return await doctorRepository.UpdateAsync(id, entity);
+        var doctorToUpdate = MapToDomain(entity);
+        doctorToUpdate.Id = id;
+
+        var updatedDoctor = await doctorRepository.UpdateAsync(id, doctorToUpdate);
+        return updatedDoctor != null ? MapToDto(updatedDoctor) : null;
     }
 
     /// <summary>
@@ -87,5 +113,14 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     public async Task<bool> DeleteDoctorAsync(int id)
     {
         return await doctorRepository.DeleteAsync(id);
+    }
+
+    /// <summary>
+    /// Retrieves all doctors from the repository as Domain class.
+    /// </summary>
+    /// <returns>List of all doctors as DTOs</returns>
+    public async Task<List<Doctor>> GetAllDoctorsWithIdAsync()
+    {
+        return await doctorRepository.ReadAsync();
     }
 }

@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Domain.Seeder;
 
+
 namespace Infrastructure.InMemory.Repositories;
 
 /// <summary>

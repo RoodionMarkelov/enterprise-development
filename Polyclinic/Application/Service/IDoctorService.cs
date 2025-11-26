@@ -16,32 +16,32 @@ public interface IDoctorService
     public Task<int> CreateDoctorAsync(DoctorDto entity);
 
     /// <summary>
-    /// Retrieves all doctors from the repository
+    /// Retrieves all doctors from the repository as DTOs
     /// </summary>
-    /// <returns>List of all doctors</returns>
-    public Task<List<Doctor>> GetAllDoctorsAsync();
+    /// <returns>List of all doctors as DTOs</returns>
+    public Task<List<DoctorDto>> GetAllDoctorsAsync();
 
     /// <summary>
-    /// Gets doctors with work experience greater than or equal to target
+    /// Gets doctors with work experience greater than or equal to target as DTOs
     /// </summary>
     /// <param name="targetWorkExperience">Minimum work experience in years</param>
-    /// <returns>List of filtered doctors</returns>
-    public Task<List<Doctor>> GetAllWithWorkExperienceMoreTargetAsync(int targetWorkExperience);
+    /// <returns>List of filtered doctors as DTOs</returns>
+    public Task<List<DoctorDto>> GetAllWithWorkExperienceMoreTargetAsync(int targetWorkExperience);
 
     /// <summary>
-    /// Retrieves a specific doctor by ID
+    /// Retrieves a specific doctor by ID as DTO
     /// </summary>
     /// <param name="id">Doctor ID</param>
-    /// <returns>Doctor or null if not found</returns>
-    public Task<Doctor?> GetDoctorAsync(int id);
+    /// <returns>Doctor DTO or null if not found</returns>
+    public Task<DoctorDto?> GetDoctorAsync(int id);
 
     /// <summary>
     /// Updates an existing doctor's information
     /// </summary>
     /// <param name="id">Doctor ID</param>
     /// <param name="entity">Updated doctor data</param>
-    /// <returns>Updated doctor or null if not found</returns>
-    public Task<Doctor?> UpdateDoctorAsync(int id, Doctor entity);
+    /// <returns>Updated doctor DTO or null if not found</returns>
+    public Task<DoctorDto?> UpdateDoctorAsync(int id, DoctorDto entity);
 
     /// <summary>
     /// Deletes a doctor by ID
@@ -49,4 +49,10 @@ public interface IDoctorService
     /// <param name="id">Doctor ID</param>
     /// <returns>True if deleted successfully, false if not found</returns>
     public Task<bool> DeleteDoctorAsync(int id);
+
+    /// <summary>
+    /// Retrieves all doctors from the repository as DTOs
+    /// </summary>
+    /// <returns>List of all doctors as DTOs</returns>
+    public Task<List<Doctor>> GetAllDoctorsWithIdAsync();
 }

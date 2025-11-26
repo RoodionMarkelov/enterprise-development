@@ -1,6 +1,5 @@
 using Application.Service;
 using Application.DTO;
-using Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -8,8 +7,8 @@ namespace Api.Controllers;
 /// <summary>
 /// Controller for patients
 /// </summary>
-/// <param name="service"></param>
-/// <param name="logger"></param>
+/// <param name="service">Patient service instance</param>
+/// <param name="logger">Logger instance</param>
 [ApiController]
 [Route("[controller]")]
 public class PatientController(PatientService service, ILogger<PatientController> logger) : ControllerBase
@@ -20,24 +19,25 @@ public class PatientController(PatientService service, ILogger<PatientController
     /// <returns>List of patients</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<List<Patient>> Get()
+    public async Task<ActionResult<List<PatientDto>>> Get()
     {
         logger.LogInformation("A list of existing patients has been obtained");
-        return Ok(service.GetAllPatients());
+        var patients = await service.GetAllPatientsAsync();
+        return Ok(patients);
     }
 
     /// <summary>
     /// Getting info about patient by ID
     /// </summary>
-    /// <param name="id"> id of patient</param>
+    /// <param name="id">ID of patient</param>
     /// <returns>Patient with id</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Patient> GetPatient(int id)
+    public async Task<ActionResult<PatientDto>> GetPatient(int id)
     {
         logger.LogInformation("Getting a patient with the {id}", id);
-        var patient = service.GetPatient(id);
+        var patient = await service.GetPatientAsync(id);
         if (patient != null) return Ok(patient);
 
         return NotFound();
@@ -47,29 +47,29 @@ public class PatientController(PatientService service, ILogger<PatientController
     /// Creating Patient
     /// </summary>
     /// <param name="patient">Entity of patient without id</param>
-    /// <returns></returns>
+    /// <returns>Created patient ID</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public ActionResult<int> CreatePatient([FromBody] PatientDto patient)
+    public async Task<ActionResult<int>> CreatePatient([FromBody] PatientDto patient)
     {
         logger.LogInformation("Creating a patient with the name {fio}", patient.Name);
-        var id = service.CreatePatient(patient);
+        var id = await service.CreatePatientAsync(patient);
         return Created($"/patient/{id}", id);
     }
 
     /// <summary>
-    /// Uptade Patient if exist
+    /// Update Patient if exist
     /// </summary>
     /// <param name="id">Id of patient</param>
     /// <param name="entity">New info about Patient</param>
     /// <returns>Entity of patient or null</returns>
-    [HttpPatch("{id}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Patient?> UpdatePatient(int id, [FromBody] Patient entity)
+    public async Task<ActionResult<PatientDto?>> UpdatePatient(int id, [FromBody] PatientDto entity)
     {
         logger.LogInformation("Patient with {id} was updated", id);
-        var patient = service.UpdatePatient(id, entity);
+        var patient = await service.UpdatePatientAsync(id, entity);
         if (patient != null) return Ok(patient);
         return NotFound();
     }
@@ -78,13 +78,13 @@ public class PatientController(PatientService service, ILogger<PatientController
     /// Delete Patient
     /// </summary>
     /// <param name="id">Id of patient</param>
-    /// <returns>True if delete</returns>
+    /// <returns>No content if deleted</returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult<bool> DeletePatient(int id)
+    public async Task<IActionResult> DeletePatient(int id)
     {
         logger.LogInformation("Patient with {id} was deleted", id);
-        var isDelete = service.DeletePatient(id);
+        var isDelete = await service.DeletePatientAsync(id);
         return NoContent();
     }
 }

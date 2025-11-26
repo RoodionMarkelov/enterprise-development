@@ -1,10 +1,12 @@
 ﻿using Domain;
+using System.Text.Json.Serialization;
 
 namespace Application.DTO;
 
 /// <summary>
 /// Class describing a doctor
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public class DoctorDto
 {
     /// <summary>

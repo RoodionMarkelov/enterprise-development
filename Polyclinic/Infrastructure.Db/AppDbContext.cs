@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain;
-using Domain.Seeder;
+using Infrastructure.Db.Seeder;
 
 
 namespace Infrastructure.Db;
@@ -14,7 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         base.OnModelCreating(modelBuilder);
 
-        var seeder = new DataSeeder();
+        var seeder = new DbSeeder();
 
         modelBuilder.Entity<Patient>(builder =>
         {

@@ -13,42 +13,42 @@ public interface IVisitService
     /// </summary>
     /// <param name="entity">Visit data transfer object</param>
     /// <returns>ID of the created visit</returns>
-    public Task<int> CreateVisit(VisitDto entity);
+    public Task<int> CreateVisitAsync(VisitDto entity);
 
     /// <summary>
-    /// Retrieves all visits from the repository
+    /// Retrieves all visits from the repository as DTOs
     /// </summary>
-    /// <returns>List of all visits</returns>
-    public Task<List<Visit>> GetAllVisits();
+    /// <returns>List of all visits as DTOs</returns>
+    public Task<List<VisitDto>> GetAllVisitsAsync();
 
     /// <summary>
-    /// Retrieves a specific visit by ID
+    /// Retrieves a specific visit by ID as DTO
     /// </summary>
     /// <param name="id">Visit ID</param>
-    /// <returns>Visit or null if not found</returns>
-    public Task<Visit?> GetVisit(int id);
+    /// <returns>Visit DTO or null if not found</returns>
+    public Task<VisitDto?> GetVisitAsync(int id);
 
     /// <summary>
     /// Updates an existing visit's information
     /// </summary>
     /// <param name="id">Visit ID</param>
     /// <param name="entity">Updated visit data</param>
-    /// <returns>Updated visit or null if not found</returns>
-    public Task<Visit?> UpdateVisit(int id, Visit entity);
+    /// <returns>Updated visit DTO or null if not found</returns>
+    public Task<VisitDto?> UpdateVisitAsync(int id, VisitDto entity);
 
     /// <summary>
     /// Deletes a visit by ID
     /// </summary>
     /// <param name="id">Visit ID</param>
     /// <returns>True if deleted successfully, false if not found</returns>
-    public Task<bool> DeleteVisit(int id);
+    public Task<bool> DeleteVisitAsync(int id);
 
     /// <summary>
-    /// Gets patients visited by specific doctor ordered by patient name
+    /// Gets patients visited by specific doctor ordered by patient name as DTOs
     /// </summary>
     /// <param name="doctorId">Doctor ID</param>
-    /// <returns>List of patients ordered by name</returns>
-    public Task<List<Patient>> GetVisitsByDoctorOrderedByPatientName(int doctorId);
+    /// <returns>List of patients ordered by name as DTOs</returns>
+    public Task<List<PatientDto>> GetVisitsByDoctorOrderedByPatientNameAsync(int doctorId);
 
     /// <summary>
     /// Counts repeat visits within specified date range
@@ -56,21 +56,21 @@ public interface IVisitService
     /// <param name="startDate">Start date of the range</param>
     /// <param name="endDate">End date of the range</param>
     /// <returns>Number of repeat visits</returns>
-    public Task<int> GetCountOfRepeatVisitsForRangeOfDate(DateTime startDate, DateTime endDate);
+    public Task<int> GetCountOfRepeatVisitsForRangeOfDateAsync(DateTime startDate, DateTime endDate);
 
     /// <summary>
-    /// Gets patients older than 30 who visited more than one doctor, ordered by birthday
+    /// Gets patients older than 30 who visited more than one doctor, ordered by birthday as DTOs
     /// </summary>
     /// <param name="currentDate">Current date for age calculation</param>
-    /// <returns>List of filtered patients ordered by birthday</returns>
-    public Task<List<Patient>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthday(DateOnly currentDate);
+    /// <returns>List of filtered patients ordered by birthday as DTOs</returns>
+    public Task<List<PatientDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate);
 
     /// <summary>
-    /// Gets all visits for specific date range in selected cabinet
+    /// Gets all visits for specific date range in selected cabinet as DTOs
     /// </summary>
     /// <param name="startDate">Start date of the range</param>
     /// <param name="endDate">End date of the range</param>
     /// <param name="cabinet">Cabinet number</param>
-    /// <returns>List of filtered visits</returns>
-    public Task<List<Visit>> GetAllVisitsForDateInSelectedCabinet(DateTime startDate, DateTime endDate, string cabinet);
+    /// <returns>List of filtered visits as DTOs</returns>
+    public Task<List<VisitDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet);
 }

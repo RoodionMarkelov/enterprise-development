@@ -1,6 +1,6 @@
 ﻿using Domain;
-using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Domain.Repositories;
 
 namespace Infrastructure.Db.Repositories;
 

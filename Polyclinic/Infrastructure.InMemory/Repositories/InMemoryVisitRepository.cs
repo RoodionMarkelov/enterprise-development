@@ -73,7 +73,9 @@ public class InMemoryVisitRepository : IRepository<Visit>
             var existingEntity = _items.FirstOrDefault(item => item.Id == id);
             if (existingEntity == null) return null;
 
+            existingEntity.PatientId = entity.PatientId;
             existingEntity.Patient = entity.Patient;
+            existingEntity.DoctorId = entity.DoctorId;
             existingEntity.Doctor = entity.Doctor;
             existingEntity.DateOfVisit = entity.DateOfVisit;
             existingEntity.NumberOfCabinet = entity.NumberOfCabinet;

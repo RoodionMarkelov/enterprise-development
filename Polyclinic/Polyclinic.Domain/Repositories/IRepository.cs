@@ -4,6 +4,7 @@
 /// Generic repository interface defining basic CRUD operations
 /// </summary>
 /// <typeparam name="T">The entity type</typeparam>
+/// <typeparam name="TDto">The Dto entity type</typeparam>
 public interface IRepository<T>
 {
     /// <summary>

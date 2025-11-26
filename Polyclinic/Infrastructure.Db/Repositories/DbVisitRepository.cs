@@ -58,8 +58,8 @@ public class DbVisitRepository(AppDbContext dbContext) : IRepository<Visit>
         var visit = await ReadAsync(id);
         if (visit == null) return null;
 
-        visit.Patient = entity.Patient;
-        visit.Doctor = entity.Doctor;
+        visit.PatientId = entity.PatientId;
+        visit.DoctorId = entity.DoctorId;
         visit.DateOfVisit = entity.DateOfVisit;
         visit.NumberOfCabinet = entity.NumberOfCabinet;
         visit.IsAgain = entity.IsAgain;

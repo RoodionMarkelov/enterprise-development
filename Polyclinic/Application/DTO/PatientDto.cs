@@ -1,9 +1,11 @@
 ﻿using Domain;
+using System.Text.Json.Serialization;
 
 namespace Application.DTO;
 /// <summary>
 /// Class describing a patient
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public class PatientDto
 {
     /// <summary>
