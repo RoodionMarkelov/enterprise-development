@@ -52,7 +52,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                    .HasForeignKey(v => v.DoctorId)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasData(seeder.Visits);
+            builder.HasData(seeder.Visits.Select(v => new
+            {
+                v.Id,
+                v.PatientId,
+                v.DoctorId,
+                v.DateOfVisit,
+                v.NumberOfCabinet,
+                v.IsAgain
+            }));
         });
     }
 }

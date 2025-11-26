@@ -1,24 +1,31 @@
 ﻿using Domain;
-using System.Text.Json.Serialization;
 
 namespace Application.DTO;
 
 /// <summary>
 /// Class describing a patient's visit to the polyclinic
 /// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public class VisitDto
 {
     /// <summary>
-    /// Field representing the patient scheduled for the appointment
+    /// Field representing the id of patient scheduled for the appointment
     /// </summary>
     public required int PatientId { get; set; }
 
     /// <summary>
-    /// Field representing the doctor assigned to the appointment
+    /// Field representing the patient scheduled for the appointment
+    /// </summary>
+    public required Patient Patient { get; set; }
+
+    /// <summary>
+    /// Field representing the id of doctor assigned to the appointment
     /// </summary>
     public required int DoctorId { get; set; }
 
+    /// <summary>
+    /// Field representing the doctor assigned to the appointment
+    /// </summary>
+    public required Doctor Doctor { get; set; }
     /// <summary>
     /// Field representing the date of the patient's appointment
     /// </summary>

@@ -51,7 +51,9 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
         return new VisitDto
         {
             PatientId = visit.PatientId,
+            Patient = visit.Patient,
             DoctorId = visit.DoctorId,
+            Doctor = visit.Doctor,
             DateOfVisit = visit.DateOfVisit,
             NumberOfCabinet = visit.NumberOfCabinet,
             IsAgain = visit.IsAgain

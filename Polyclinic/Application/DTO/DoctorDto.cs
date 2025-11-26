@@ -6,7 +6,6 @@ namespace Application.DTO;
 /// <summary>
 /// Class describing a doctor
 /// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public class DoctorDto
 {
     /// <summary>
@@ -27,6 +26,7 @@ public class DoctorDto
     /// <summary>
     /// Field representing the doctor's specialization
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public Specialization? Specialization { get; set; }
 
     /// <summary>

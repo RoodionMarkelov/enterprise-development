@@ -11,7 +11,7 @@ namespace Api.Controllers;
 /// <param name="logger">Logger instance</param>
 [ApiController]
 [Route("[controller]")]
-public class DoctorController(DoctorService service, ILogger<DoctorController> logger) : ControllerBase
+public class DoctorController(IDoctorService service, ILogger<DoctorController> logger) : ControllerBase
 {
     /// <summary>
     /// Get info about doctors

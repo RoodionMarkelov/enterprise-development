@@ -5,7 +5,6 @@ namespace Application.DTO;
 /// <summary>
 /// Class describing a patient
 /// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter))]
 public class PatientDto
 {
     /// <summary>
@@ -21,6 +20,7 @@ public class PatientDto
     /// <summary>
     /// Field representing the patient's gender
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public required Gender Gender { get; set; }
 
     /// <summary>
@@ -36,11 +36,13 @@ public class PatientDto
     /// <summary>
     /// Field representing the patient's blood group
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public BloodGroup? BloodGroup{ get; set; }
 
     /// <summary>
     /// Field representing the patient's Rh factor
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public RhFactor? RhFactor { get; set; }
 
     /// <summary>

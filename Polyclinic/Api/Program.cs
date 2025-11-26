@@ -30,10 +30,6 @@ builder.Services.AddScoped<IRepository<Doctor>, DbDoctorRepository>();
 builder.Services.AddScoped<IRepository<Patient>, DbPatientRepository>();
 builder.Services.AddScoped<IRepository<Visit>, DbVisitRepository>();
 
-builder.Services.AddScoped<DbDoctorRepository>();
-builder.Services.AddScoped<DbPatientRepository>();
-builder.Services.AddScoped<DbVisitRepository>();
-
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
