@@ -24,7 +24,7 @@ public class AnalyticController(
     /// <returns>List of patients</returns>
     [HttpGet("doctors/{doctorId}/patients")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<PatientDto>>> GetDoctorPatients(int doctorId)
+    public async Task<ActionResult<List<PatientResponseDto>>> GetDoctorPatients(int doctorId)
     {
         logger.LogInformation("Getting patients for doctor {DoctorId}", doctorId);
         var patients = await visitService.GetVisitsByDoctorOrderedByPatientNameAsync(doctorId);
@@ -55,7 +55,7 @@ public class AnalyticController(
     /// <returns>List of patients</returns>
     [HttpGet("patients/older-than-30-multiple-doctors")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<PatientDto>>> GetPatientsOlderThan30WithMultipleDoctors(
+    public async Task<ActionResult<List<PatientResponseDto>>> GetPatientsOlderThan30WithMultipleDoctors(
         [FromQuery] DateTime currentDate = default)
     {
         if (currentDate == default)
@@ -77,7 +77,7 @@ public class AnalyticController(
     /// <returns>List of visits</returns>
     [HttpGet("visits/by-cabinet")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<VisitDto>>> GetVisitsByCabinet(
+    public async Task<ActionResult<List<VisitResponseDto>>> GetVisitsByCabinet(
         [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate,
         [FromQuery] string cabinet)
@@ -94,7 +94,7 @@ public class AnalyticController(
     /// <returns>List of doctors</returns>
     [HttpGet("doctors/experienced")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<DoctorDto>>> GetExperiencedDoctors([FromQuery] int minExperience)
+    public async Task<ActionResult<List<DoctorResponseDto>>> GetExperiencedDoctors([FromQuery] int minExperience)
     {
         logger.LogInformation("Getting doctors with experience more than {MinExperience} years", minExperience);
         var doctors = await doctorService.GetAllWithWorkExperienceMoreTargetAsync(minExperience);

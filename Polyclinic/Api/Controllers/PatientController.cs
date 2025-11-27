@@ -19,7 +19,7 @@ public class PatientController(IPatientService service, ILogger<PatientControlle
     /// <returns>List of patients</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<PatientDto>>> Get()
+    public async Task<ActionResult<List<PatientResponseDto>>> Get()
     {
         logger.LogInformation("A list of existing patients has been obtained");
         var patients = await service.GetAllPatientsAsync();
@@ -34,7 +34,7 @@ public class PatientController(IPatientService service, ILogger<PatientControlle
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<PatientDto>> GetPatient(int id)
+    public async Task<ActionResult<PatientResponseDto>> GetPatient(int id)
     {
         logger.LogInformation("Getting a patient with the {id}", id);
         var patient = await service.GetPatientAsync(id);

@@ -46,6 +46,24 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     }
 
     /// <summary>
+    /// Maps Doctor entity to DoctorResponseDto
+    /// </summary>
+    /// <param name="doctor">Doctor entity</param>
+    /// <returns>Mapped Doctor DTO</returns>
+    private static DoctorResponseDto MapToResponseDto(Doctor doctor)
+    {
+        return new DoctorResponseDto
+        {
+            Id = doctor.Id,
+            Passport = doctor.Passport,
+            Name = doctor.Name,
+            Birthday = doctor.Birthday,
+            Specialization = doctor.Specialization,
+            WorkExperience = doctor.WorkExperience,
+        };
+    }
+
+    /// <summary>
     /// Creates a new doctor from DTO data
     /// </summary>
     /// <param name="entity">Doctor data transfer object</param>
@@ -59,10 +77,10 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     /// Retrieves all doctors from the repository as DTOs
     /// </summary>
     /// <returns>List of all doctors as DTOs</returns>
-    public async Task<List<DoctorDto>> GetAllDoctorsAsync()
+    public async Task<List<DoctorResponseDto>> GetAllDoctorsAsync()
     {
         var doctors = await doctorRepository.ReadAsync();
-        return [.. doctors.Select(MapToDto)];
+        return [.. doctors.Select(MapToResponseDto)];
     }
 
     /// <summary>
@@ -83,10 +101,10 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     /// </summary>
     /// <param name="id">Doctor ID</param>
     /// <returns>Doctor DTO or null if not found</returns>
-    public async Task<DoctorDto?> GetDoctorAsync(int id)
+    public async Task<DoctorResponseDto?> GetDoctorAsync(int id)
     {
         var doctor = await doctorRepository.ReadAsync(id);
-        return doctor != null ? MapToDto(doctor) : null;
+        return doctor != null ? MapToResponseDto(doctor) : null;
     }
 
     /// <summary>

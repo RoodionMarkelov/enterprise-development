@@ -18,14 +18,14 @@ public interface IPatientService
     /// Retrieves all patients from the repository as DTOs
     /// </summary>
     /// <returns>List of all patients as DTOs</returns>
-    public Task<List<PatientDto>> GetAllPatientsAsync();
+    public Task<List<PatientResponseDto>> GetAllPatientsAsync();
 
     /// <summary>
     /// Retrieves a specific patient by ID as DTO
     /// </summary>
     /// <param name="id">Patient ID</param>
     /// <returns>Patient DTO or null if not found</returns>
-    public Task<PatientDto?> GetPatientAsync(int id);
+    public Task<PatientResponseDto?> GetPatientAsync(int id);
 
     /// <summary>
     /// Updates an existing patient's information

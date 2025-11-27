@@ -23,9 +23,9 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
         return new Visit
         {
             Id = 0,
-            PatientId = entity.PatientId, 
+            PatientId = entity.PatientId,
             Patient = patient,
-            DoctorId = entity.DoctorId, 
+            DoctorId = entity.DoctorId,
             Doctor = doctor,
             DateOfVisit = entity.DateOfVisit,
             NumberOfCabinet = entity.NumberOfCabinet,
@@ -33,10 +33,14 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
         };
     }
 
-    private static PatientDto MapToPatientDto(Patient patient)
+    /// <summary>
+    /// Maps Patient entity to PatientResponseDto
+    /// </summary>
+    private static PatientResponseDto MapToPatientResponseDto(Patient patient)
     {
-        return new PatientDto
+        return new PatientResponseDto
         {
+            Id = patient.Id,
             Passport = patient.Passport,
             Name = patient.Name,
             Gender = patient.Gender,
@@ -49,16 +53,33 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     }
 
     /// <summary>
-    /// Maps Visit entity to VisitResponseDto (с полными данными)
+    /// Maps Doctor entity to DoctorResponseDto
+    /// </summary>
+    private static DoctorResponseDto MapToDoctorResponseDto(Doctor doctor)
+    {
+        return new DoctorResponseDto
+        {
+            Id = doctor.Id,
+            Passport = doctor.Passport,
+            Name = doctor.Name,
+            Birthday = doctor.Birthday,
+            Specialization = doctor.Specialization,
+            WorkExperience = doctor.WorkExperience,
+        };
+    }
+
+    /// <summary>
+    /// Maps Visit entity to VisitResponseDto 
     /// </summary>
     private static VisitResponseDto MapToResponseDto(Visit visit)
     {
         return new VisitResponseDto
         {
+            Id = visit.Id,
             PatientId = visit.PatientId,
-            Patient = visit.Patient, 
+            Patient = MapToPatientResponseDto(visit.Patient),  
             DoctorId = visit.DoctorId,
-            Doctor = visit.Doctor,      
+            Doctor = MapToDoctorResponseDto(visit.Doctor),
             DateOfVisit = visit.DateOfVisit,
             NumberOfCabinet = visit.NumberOfCabinet,
             IsAgain = visit.IsAgain
@@ -117,14 +138,14 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// </summary>
     /// <param name="doctorId">Doctor ID</param>
     /// <returns>List of patients ordered by name as DTOs</returns>
-    public async Task<List<PatientDto>> GetVisitsByDoctorOrderedByPatientNameAsync(int doctorId)
+    public async Task<List<PatientResponseDto>> GetVisitsByDoctorOrderedByPatientNameAsync(int doctorId)
     {
         var visits = await repository.ReadAsync();
         return [.. visits
             .Where(v => v.Doctor.Id == doctorId)
             .Select(v => v.Patient)
             .OrderBy(p => p.Name)
-            .Select(MapToPatientDto)];
+            .Select(MapToPatientResponseDto)];
     }
 
     /// <summary>
@@ -144,7 +165,7 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// </summary>
     /// <param name="currentDate">Current date for age calculation</param>
     /// <returns>List of filtered patients ordered by birthday as DTOs</returns>
-    public async Task<List<PatientDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate)
+    public async Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate)
     {
         var visits = await repository.ReadAsync();
         var patients = await patientRepository.ReadAsync();
@@ -160,7 +181,7 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
             .Where(x => x.Patient.Birthday <= currentDate.AddYears(-30) && x.UniqueDoctors > 1)
             .Select(x => x.Patient)
             .OrderBy(p => p.Birthday)
-            .Select(MapToPatientDto);
+            .Select(MapToPatientResponseDto);
 
         return [.. result];
     }

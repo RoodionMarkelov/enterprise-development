@@ -47,7 +47,7 @@ public interface IVisitService
     /// </summary>
     /// <param name="doctorId">Doctor ID</param>
     /// <returns>List of patients ordered by name as DTOs</returns>
-    public Task<List<PatientDto>> GetVisitsByDoctorOrderedByPatientNameAsync(int doctorId);
+    public Task<List<PatientResponseDto>> GetVisitsByDoctorOrderedByPatientNameAsync(int doctorId);
 
     /// <summary>
     /// Counts repeat visits within specified date range
@@ -62,7 +62,7 @@ public interface IVisitService
     /// </summary>
     /// <param name="currentDate">Current date for age calculation</param>
     /// <returns>List of filtered patients ordered by birthday as DTOs</returns>
-    public Task<List<PatientDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate);
+    public Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate);
 
     /// <summary>
     /// Gets all visits for specific date range in selected cabinet as DTOs

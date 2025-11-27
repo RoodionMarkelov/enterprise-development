@@ -8,6 +8,11 @@ namespace Application.DTO;
 public class VisitResponseDto
 {
     /// <summary>
+    /// Field representing the id number of visit
+    /// </summary>
+    public required int Id { get; set; }
+
+    /// <summary>
     /// Field representing the id of patient scheduled for the appointment
     /// </summary>
     public required int PatientId { get; set; }
@@ -15,7 +20,7 @@ public class VisitResponseDto
     /// <summary>
     /// Field representing the patient scheduled for the appointment
     /// </summary>
-    public required Patient Patient { get; set; }
+    public required PatientResponseDto Patient { get; set; }
 
     /// <summary>
     /// Field representing the id of doctor assigned to the appointment
@@ -25,7 +30,7 @@ public class VisitResponseDto
     /// <summary>
     /// Field representing the doctor assigned to the appointment
     /// </summary>
-    public required Doctor Doctor { get; set; }
+    public required DoctorResponseDto Doctor { get; set; }
     /// <summary>
     /// Field representing the date of the patient's appointment
     /// </summary>

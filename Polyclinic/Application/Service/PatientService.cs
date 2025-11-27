@@ -52,6 +52,25 @@ public class PatientService(IRepository<Patient> patientRepository) : IPatientSe
     }
 
     /// <summary>
+    /// Maps Patient entity to PatientResponseDto
+    /// </summary>
+    private static PatientResponseDto MapToResponseDto(Patient patient)
+    {
+        return new PatientResponseDto
+        {
+            Id = patient.Id,  // ← ДОБАВИТЬ ID
+            Passport = patient.Passport,
+            Name = patient.Name,
+            Gender = patient.Gender,
+            Birthday = patient.Birthday,
+            Address = patient.Address,
+            BloodGroup = patient.BloodGroup,
+            RhFactor = patient.RhFactor,
+            Phone = patient.Phone,
+        };
+    }
+
+    /// <summary>
     /// Creates a new patient from DTO data
     /// </summary>
     /// <param name="entity">Patient data transfer object</param>
@@ -66,10 +85,10 @@ public class PatientService(IRepository<Patient> patientRepository) : IPatientSe
     /// Retrieves all patients from the repository as DTOs
     /// </summary>
     /// <returns>List of all patients as DTOs</returns>
-    public async Task<List<PatientDto>> GetAllPatientsAsync()
+    public async Task<List<PatientResponseDto>> GetAllPatientsAsync()
     {
         var patients = await patientRepository.ReadAsync();
-        return [.. patients.Select(MapToDto)];
+        return [.. patients.Select(MapToResponseDto)];
     }
 
     /// <summary>
@@ -77,10 +96,10 @@ public class PatientService(IRepository<Patient> patientRepository) : IPatientSe
     /// </summary>
     /// <param name="id">Patient ID</param>
     /// <returns>Patient DTO or null if not found</returns>
-    public async Task<PatientDto?> GetPatientAsync(int id)
+    public async Task<PatientResponseDto?> GetPatientAsync(int id)
     {
         var patient = await patientRepository.ReadAsync(id);
-        return patient != null ? MapToDto(patient) : null;
+        return patient != null ? MapToResponseDto(patient) : null;
     }
 
     /// <summary>

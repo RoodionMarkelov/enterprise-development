@@ -19,7 +19,7 @@ public interface IDoctorService
     /// Retrieves all doctors from the repository as DTOs
     /// </summary>
     /// <returns>List of all doctors as DTOs</returns>
-    public Task<List<DoctorDto>> GetAllDoctorsAsync();
+    public Task<List<DoctorResponseDto>> GetAllDoctorsAsync();
 
     /// <summary>
     /// Gets doctors with work experience greater than or equal to target as DTOs
@@ -33,7 +33,7 @@ public interface IDoctorService
     /// </summary>
     /// <param name="id">Doctor ID</param>
     /// <returns>Doctor DTO or null if not found</returns>
-    public Task<DoctorDto?> GetDoctorAsync(int id);
+    public Task<DoctorResponseDto?> GetDoctorAsync(int id);
 
     /// <summary>
     /// Updates an existing doctor's information

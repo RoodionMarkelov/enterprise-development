@@ -19,7 +19,7 @@ public class VisitController(IVisitService service, ILogger<VisitController> log
     /// <returns>List of visits</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<VisitDto>>> Get()
+    public async Task<ActionResult<List<VisitResponseDto>>> Get()
     {
         logger.LogInformation("A list of existing visits has been obtained");
         var visits = await service.GetAllVisitsAsync();
@@ -34,7 +34,7 @@ public class VisitController(IVisitService service, ILogger<VisitController> log
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<VisitDto>> GetVisit(int id)
+    public async Task<ActionResult<VisitResponseDto>> GetVisit(int id)
     {
         logger.LogInformation("Getting a visit with the {id}", id);
         var visit = await service.GetVisitAsync(id);
