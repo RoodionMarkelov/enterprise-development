@@ -85,7 +85,7 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     public async Task<List<VisitResponseDto>> GetAllVisitsAsync()
     {
         var visits = await repository.ReadAsync();
-        return visits.Select(MapToResponseDto).ToList();
+        return [.. visits.Select(MapToResponseDto)];
     }
 
     /// <summary>
@@ -125,12 +125,11 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     public async Task<List<PatientDto>> GetVisitsByDoctorOrderedByPatientNameAsync(int doctorId)
     {
         var visits = await repository.ReadAsync();
-        return visits
+        return [.. visits
             .Where(v => v.Doctor.Id == doctorId)
             .Select(v => v.Patient)
             .OrderBy(p => p.Name)
-            .Select(MapToPatientDto)
-            .ToList();
+            .Select(MapToPatientDto)];
     }
 
     /// <summary>
@@ -166,10 +165,9 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
             .Where(x => x.Patient.Birthday <= currentDate.AddYears(-30) && x.UniqueDoctors > 1)
             .Select(x => x.Patient)
             .OrderBy(p => p.Birthday)
-            .Select(MapToPatientDto)
-            .ToList();
+            .Select(MapToPatientDto);
 
-        return result;
+        return [.. result];
     }
 
     /// <summary>
@@ -182,9 +180,8 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     public async Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet)
     {
         var visits = await repository.ReadAsync();
-        return visits
+        return [.. visits
             .Where(v => v.NumberOfCabinet == cabinet && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate)
-            .Select(MapToResponseDto)
-            .ToList();
+            .Select(MapToResponseDto)];
     }
 }

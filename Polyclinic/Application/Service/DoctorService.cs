@@ -62,7 +62,7 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     public async Task<List<DoctorDto>> GetAllDoctorsAsync()
     {
         var doctors = await doctorRepository.ReadAsync();
-        return doctors.Select(MapToDto).ToList();
+        return [.. doctors.Select(MapToDto)];
     }
 
     /// <summary>
@@ -73,10 +73,9 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     public async Task<List<DoctorDto>> GetAllWithWorkExperienceMoreTargetAsync(int targetWorkExperience)
     {
         var doctors = await doctorRepository.ReadAsync();
-        return doctors
+        return [.. doctors
             .Where(d => d.WorkExperience >= targetWorkExperience)
-            .Select(MapToDto)
-            .ToList();
+            .Select(MapToDto)];
     }
 
     /// <summary>
@@ -99,7 +98,6 @@ public class DoctorService(IRepository<Doctor> doctorRepository) : IDoctorServic
     public async Task<DoctorDto?> UpdateDoctorAsync(int id, DoctorDto entity)
     {
         var doctorToUpdate = MapToDomain(entity);
-        doctorToUpdate.Id = id;
 
         var updatedDoctor = await doctorRepository.UpdateAsync(id, doctorToUpdate);
         return updatedDoctor != null ? MapToDto(updatedDoctor) : null;

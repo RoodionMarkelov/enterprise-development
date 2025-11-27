@@ -69,7 +69,7 @@ public class PatientService(IRepository<Patient> patientRepository) : IPatientSe
     public async Task<List<PatientDto>> GetAllPatientsAsync()
     {
         var patients = await patientRepository.ReadAsync();
-        return patients.Select(MapToDto).ToList();
+        return [.. patients.Select(MapToDto)];
     }
 
     /// <summary>
@@ -92,7 +92,6 @@ public class PatientService(IRepository<Patient> patientRepository) : IPatientSe
     public async Task<PatientDto?> UpdatePatientAsync(int id, PatientDto entity)
     {
         var patientToUpdate = MapToDomain(entity);
-        patientToUpdate.Id = id;
 
         var updatedPatient = await patientRepository.UpdateAsync(id, patientToUpdate);
         return updatedPatient != null ? MapToDto(updatedPatient) : null;
