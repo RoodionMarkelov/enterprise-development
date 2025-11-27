@@ -17,13 +17,8 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// </summary>
     private async Task<Visit> MapToDomainAsync(VisitDto entity)
     {
-        var patient = await patientRepository.ReadAsync(entity.PatientId);
-        if (patient == null)
-            throw new ArgumentException($"Patient with id {entity.PatientId} not found");
-
-        var doctor = await doctorRepository.ReadAsync(entity.DoctorId);
-        if (doctor == null)
-            throw new ArgumentException($"Doctor with id {entity.DoctorId} not found");
+        var patient = await patientRepository.ReadAsync(entity.PatientId) ?? throw new ArgumentException($"Patient with id {entity.PatientId} not found");
+        var doctor = await doctorRepository.ReadAsync(entity.DoctorId) ?? throw new ArgumentException($"Doctor with id {entity.DoctorId} not found");
 
         return new Visit
         {
