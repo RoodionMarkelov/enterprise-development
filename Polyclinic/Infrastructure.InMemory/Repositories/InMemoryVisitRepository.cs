@@ -22,7 +22,7 @@ public class InMemoryVisitRepository : IRepository<Visit>
         if (seeder == null) return;
 
         _items = seeder.Visits;
-        _currentId = seeder.Visits.Count();
+        _currentId = seeder.Visits.Count;
     }
 
     /// <summary>

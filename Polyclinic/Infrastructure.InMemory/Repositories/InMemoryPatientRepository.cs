@@ -23,7 +23,7 @@ public class InMemoryPatientRepository : IRepository<Patient>
         if (seeder == null) return;
 
         _items = seeder.Patients;
-        _currentId = seeder.Patients.Count();
+        _currentId = seeder.Patients.Count;
     }
 
     /// <summary>
