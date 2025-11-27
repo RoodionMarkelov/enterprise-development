@@ -84,7 +84,7 @@ public class VisitController(IVisitService service, ILogger<VisitController> log
     public async Task<IActionResult> DeleteVisit(int id)
     {
         logger.LogInformation("Visit with {id} was deleted", id);
-        var isDelete = await service.DeleteVisitAsync(id);
+        await service.DeleteVisitAsync(id);
         return NoContent();
     }
 }

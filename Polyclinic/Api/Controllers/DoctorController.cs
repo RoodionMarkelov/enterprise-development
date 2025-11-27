@@ -83,7 +83,7 @@ public class DoctorController(IDoctorService service, ILogger<DoctorController> 
     public async Task<IActionResult> DeleteDoctor(int id)
     {
         logger.LogInformation("Doctor with {id} was deleted", id);
-        var isDelete = await service.DeleteDoctorAsync(id);
+        await service.DeleteDoctorAsync(id);
         return NoContent();
     }
 }

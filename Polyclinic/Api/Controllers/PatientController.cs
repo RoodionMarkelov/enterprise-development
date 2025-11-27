@@ -84,7 +84,7 @@ public class PatientController(IPatientService service, ILogger<PatientControlle
     public async Task<IActionResult> DeletePatient(int id)
     {
         logger.LogInformation("Patient with {id} was deleted", id);
-        var isDelete = await service.DeletePatientAsync(id);
+        await service.DeletePatientAsync(id);
         return NoContent();
     }
 }
