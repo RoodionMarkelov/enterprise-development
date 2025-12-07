@@ -100,9 +100,8 @@ public class PolyclinicRepoTests(PolyclinicRepoFixture fixture) : IClassFixture<
         const int expectedCount = 3;
         const string cabinet = "101-A";
         var startDate = new DateTime(2024, 1, 1);
-        var endDate = new DateTime(2024, 1, 31);
 
-        var cabinetVisits = await fixture.VisitService.GetAllVisitsForDateInSelectedCabinetAsync(startDate, endDate, cabinet);
+        var cabinetVisits = await fixture.VisitService.GetAllVisitsForDateInSelectedCabinetAsync(cabinet, startDate);
 
         Assert.Equal(expectedCount, cabinetVisits.Count);
     }

@@ -5,6 +5,8 @@ using Infrastructure.Db.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ServiceDefaults;
 using Domain;
+using Api.Kafka;
+using Confluent.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,24 @@ builder.Services.AddScoped<IRepository<Visit>, DbVisitRepository>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
+
+var kafkaConnection = builder.Configuration["ConnectionStrings:KafkaConnection"]
+                      ?? builder.Configuration["Kafka:BootstrapServers"]
+                      ?? "localhost:9092";
+
+builder.Services.AddSingleton<IConsumer<Ignore, string>>(sp =>
+{
+    var config = new ConsumerConfig
+    {
+        BootstrapServers = kafkaConnection,
+        GroupId = builder.Configuration["Kafka:ConsumerGroup"] ?? "polyclinic-api-visit-consumer",
+        AutoOffsetReset = AutoOffsetReset.Earliest,
+        EnableAutoCommit = false
+    };
+    return new ConsumerBuilder<Ignore, string>(config).Build();
+});
+
+builder.Services.AddHostedService<KafkaConsumer>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

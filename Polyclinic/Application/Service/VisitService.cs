@@ -165,8 +165,9 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// </summary>
     /// <param name="currentDate">Current date for age calculation</param>
     /// <returns>List of filtered patients ordered by birthday as DTOs</returns>
-    public async Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate)
+    public async Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly? currentDate = null)
     {
+        var currentDateForFunction = currentDate ?? DateOnly.FromDateTime(DateTime.Now);
         var visits = await repository.ReadAsync();
         var patients = await patientRepository.ReadAsync();
 
@@ -178,7 +179,7 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
                 Patient = patients.First(p => p.Id == g.Key),
                 UniqueDoctors = g.Select(v => v.Doctor.Id).Distinct().Count()
             })
-            .Where(x => x.Patient.Birthday <= currentDate.AddYears(-30) && x.UniqueDoctors > 1)
+            .Where(x => x.Patient.Birthday <= currentDateForFunction.AddYears(-30) && x.UniqueDoctors > 1)
             .Select(x => x.Patient)
             .OrderBy(p => p.Birthday)
             .Select(MapToPatientResponseDto);
@@ -190,14 +191,17 @@ public class VisitService(IRepository<Visit> repository, IRepository<Patient> pa
     /// Gets all visits for specific date range in selected cabinet as DTOs
     /// </summary>
     /// <param name="startDate">Start date of the range</param>
-    /// <param name="endDate">End date of the range</param>
     /// <param name="cabinet">Cabinet number</param>
     /// <returns>List of filtered visits as DTOs</returns>
-    public async Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet)
+    public async Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(string? cabinet = null, DateTime? startDate = null)
     {
+        var currentCabinet = cabinet ?? "101-A";
+        var start = startDate ?? new DateTime(2024, 1, 1);
+        var end = start.AddMonths(1).AddDays(-1);
+
         var visits = await repository.ReadAsync();
         return [.. visits
-            .Where(v => v.NumberOfCabinet == cabinet && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate)
+            .Where(v => v.NumberOfCabinet == currentCabinet && v.DateOfVisit >= start && v.DateOfVisit <= end)
             .Select(MapToResponseDto)];
     }
 }

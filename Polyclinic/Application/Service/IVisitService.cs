@@ -62,14 +62,13 @@ public interface IVisitService
     /// </summary>
     /// <param name="currentDate">Current date for age calculation</param>
     /// <returns>List of filtered patients ordered by birthday as DTOs</returns>
-    public Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly currentDate);
+    public Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly? currentDate);
 
     /// <summary>
     /// Gets all visits for specific date range in selected cabinet as DTOs
     /// </summary>
     /// <param name="startDate">Start date of the range</param>
-    /// <param name="endDate">End date of the range</param>
     /// <param name="cabinet">Cabinet number</param>
     /// <returns>List of filtered visits as DTOs</returns>
-    public Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(DateTime startDate, DateTime endDate, string cabinet);
+    public Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(string? cabinet, DateTime? startDate);
 }

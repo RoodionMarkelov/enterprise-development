@@ -56,14 +56,12 @@ public class AnalyticController(
     [HttpGet("patients/older-than-30-multiple-doctors")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<PatientResponseDto>>> GetPatientsOlderThan30WithMultipleDoctors(
-        [FromQuery] DateTime currentDate = default)
+        [FromQuery] DateTime? currentDate)
     {
-        if (currentDate == default)
-            currentDate = DateTime.Today;
-
         logger.LogInformation("Getting patients older than 30 with multiple doctors as of {CurrentDate}", currentDate);
 
-        var currentDateOnly = DateOnly.FromDateTime(currentDate);
+        DateOnly? currentDateOnly = currentDate.HasValue ? DateOnly.FromDateTime(currentDate.Value) : null;
+
         var patients = await visitService.GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(currentDateOnly);
         return Ok(patients);
     }
@@ -71,19 +69,17 @@ public class AnalyticController(
     /// <summary>
     /// Get all visits in specified cabinet within date range
     /// </summary>
-    /// <param name="startDate">Start date</param>
-    /// <param name="endDate">End date</param>
-    /// <param name="cabinet">Cabinet number</param>
+    /// <param name="startDate">Start date (default: 2024-01-01)</param>
+    /// <param name="cabinet">Cabinet number (default: "101-A")</param>
     /// <returns>List of visits</returns>
     [HttpGet("visits/by-cabinet")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<VisitResponseDto>>> GetVisitsByCabinet(
-        [FromQuery] DateTime startDate,
-        [FromQuery] DateTime endDate,
-        [FromQuery] string cabinet)
+        [FromQuery] string? cabinet,
+        [FromQuery] DateTime? startDate)
     {
-        logger.LogInformation("Getting visits in cabinet {Cabinet} from {StartDate} to {EndDate}", cabinet, startDate, endDate);
-        var visits = await visitService.GetAllVisitsForDateInSelectedCabinetAsync(startDate, endDate, cabinet);
+        logger.LogInformation("Getting visits in cabinet {Cabinet} from {StartDate}", cabinet, startDate);
+        var visits = await visitService.GetAllVisitsForDateInSelectedCabinetAsync(cabinet, startDate);
         return Ok(visits);
     }
 
