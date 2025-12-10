@@ -1,12 +1,15 @@
 using ServiceDefaults;
 using Confluent.Kafka;
 using Generator;
+using Aspire.Confluent.Kafka;
 
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
 
-var kafkaConnection = builder.Configuration["ConnectionStrings:KafkaConnection"] ?? "localhost:9092";
+builder.Services.Configure<KafkaProducerSettings>(builder.Configuration.GetSection("KafkaProducer"));
+
+var kafkaConnection = builder.Configuration.GetConnectionString("KafkaConnection") ?? throw new InvalidOperationException("Kafka connection string is not configured."); ;
 
 builder.Services.AddSingleton(s =>
 {

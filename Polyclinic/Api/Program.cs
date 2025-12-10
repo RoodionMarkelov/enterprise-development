@@ -36,16 +36,19 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
-var kafkaConnection = builder.Configuration["ConnectionStrings:KafkaConnection"]
-                      ?? builder.Configuration["Kafka:BootstrapServers"]
-                      ?? "localhost:9092";
+var kafkaConnection = builder.Configuration.GetConnectionString("KafkaConnection")
+    ?? builder.Configuration["Kafka:BootstrapServers"]
+    ?? throw new InvalidOperationException("Kafka connection is not configured");
 
-builder.Services.AddSingleton<IConsumer<Ignore, string>>(sp =>
+var consumerGroup = builder.Configuration["Kafka:ConsumerGroup"]
+    ?? "polyclinic-api-visit-consumer";
+
+builder.Services.AddSingleton(sp =>
 {
     var config = new ConsumerConfig
     {
         BootstrapServers = kafkaConnection,
-        GroupId = builder.Configuration["Kafka:ConsumerGroup"] ?? "polyclinic-api-visit-consumer",
+        GroupId = consumerGroup,
         AutoOffsetReset = AutoOffsetReset.Earliest,
         EnableAutoCommit = false
     };

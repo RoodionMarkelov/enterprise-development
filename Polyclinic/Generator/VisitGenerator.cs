@@ -22,7 +22,17 @@ public class Generator
                 new DateTime(2025, 12, 31, 18, 0, 0) 
            ))
            .RuleFor(x => x.NumberOfCabinet, f =>
-               $"{f.Random.Int(101, 315)}-{f.Random.ArrayElement(new[] { "A", "B", "C" })}")
+           {
+               var validNumbers = new List<int>();
+
+               for (var i = 101; i <= 120; i++) validNumbers.Add(i);
+               for (var i = 201; i <= 220; i++) validNumbers.Add(i);
+               for (var i = 301; i <= 315; i++) validNumbers.Add(i);
+
+               var number = f.Random.ListItem(validNumbers);
+               var letter = f.Random.ArrayElement(["A", "B", "C"]);
+               return $"{number}-{letter}";
+           })
            .RuleFor(x => x.IsAgain, f => f.Random.Bool(0.3f)) 
            .Generate(count);
 }

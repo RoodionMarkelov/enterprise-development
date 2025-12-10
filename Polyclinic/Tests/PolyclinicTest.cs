@@ -63,8 +63,8 @@ public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<Polyclin
     {
         const int expectedCount = 4;
 
-        var startDate = new DateTime(2024, 1, 1);
-        var endDate = new DateTime(2024, 1, 31);
+        var startDate = new DateTime(2025, 12, 1);
+        var endDate = new DateTime(2025, 12, 31);
 
         var experiencedRepeat = fixture.Visits
             .Count(v => v.IsAgain && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate);
@@ -114,8 +114,8 @@ public class PolyclinicTests(PolyclinicFixture fixture) : IClassFixture<Polyclin
     {
         const int expectedCount = 3;
         const string cabinet = "101-A";
-        var startDate = new DateTime(2024, 1, 1);
-        var endDate = new DateTime(2024, 1, 31);
+        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
 
         var experiencedVisit = fixture.Visits
             .Where(v => v.NumberOfCabinet == cabinet && v.DateOfVisit >= startDate && v.DateOfVisit <= endDate)

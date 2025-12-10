@@ -241,7 +241,7 @@ public class DataSeeder
             PatientId = Patients[0].Id,
             Doctor = Doctors[0],
             DoctorId = Doctors[0].Id,
-            DateOfVisit = new DateTime(2024, 1, 15, 10, 30, 0),
+            DateOfVisit = new DateTime(2025, 12, 15, 10, 30, 0),
             NumberOfCabinet = "101-A",
             IsAgain = false
         },
@@ -252,7 +252,7 @@ public class DataSeeder
             PatientId = Patients[1].Id,
             Doctor = Doctors[1],
             DoctorId = Doctors[1].Id,
-            DateOfVisit = new DateTime(2024, 1, 17, 14, 15, 0),
+            DateOfVisit = new DateTime(2025, 12, 17, 14, 15, 0),
             NumberOfCabinet = "205-B",
             IsAgain = true
         },
@@ -285,7 +285,7 @@ public class DataSeeder
             PatientId = Patients[2].Id,
             Doctor = Doctors[4],
             DoctorId = Doctors[4].Id,
-            DateOfVisit = new DateTime(2024, 1, 13, 16, 20, 0),
+            DateOfVisit = new DateTime(2025, 12, 13, 16, 20, 0),
             NumberOfCabinet = "308-E",
             IsAgain = true
         },
@@ -296,7 +296,7 @@ public class DataSeeder
             PatientId = Patients[3].Id,
             Doctor = Doctors[0],
             DoctorId = Doctors[0].Id,
-            DateOfVisit = new DateTime(2024, 1, 21, 13, 0, 0),
+            DateOfVisit = new DateTime(2025, 12, 21, 13, 0, 0),
             NumberOfCabinet = "101-A",
             IsAgain = false
         },
@@ -307,7 +307,7 @@ public class DataSeeder
             PatientId = Patients[6].Id,
             Doctor = Doctors[0],
             DoctorId = Doctors[0].Id,
-            DateOfVisit = new DateTime(2024, 1, 10, 9, 15, 0),
+            DateOfVisit = new DateTime(2025, 12, 10, 9, 15, 0),
             NumberOfCabinet = "101-A",
             IsAgain = false
         },
@@ -318,7 +318,7 @@ public class DataSeeder
             PatientId = Patients[6].Id,
             Doctor = Doctors[1],
             DoctorId = Doctors[1].Id,
-            DateOfVisit = new DateTime(2024, 1, 12, 11, 30, 0),
+            DateOfVisit = new DateTime(2025, 12, 12, 11, 30, 0),
             NumberOfCabinet = "205-B",
             IsAgain = true
         },
@@ -340,7 +340,7 @@ public class DataSeeder
             PatientId = Patients[7].Id,
             Doctor = Doctors[4],
             DoctorId = Doctors[4].Id,
-            DateOfVisit = new DateTime(2024, 1, 8, 10, 0, 0),
+            DateOfVisit = new DateTime(2025, 12, 8, 10, 0, 0),
             NumberOfCabinet = "308-E",
             IsAgain = true
         },

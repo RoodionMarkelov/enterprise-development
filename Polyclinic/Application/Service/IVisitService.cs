@@ -52,23 +52,19 @@ public interface IVisitService
     /// <summary>
     /// Counts repeat visits within specified date range
     /// </summary>
-    /// <param name="startDate">Start date of the range</param>
-    /// <param name="endDate">End date of the range</param>
     /// <returns>Number of repeat visits</returns>
-    public Task<int> GetCountOfRepeatVisitsForRangeOfDateAsync(DateTime startDate, DateTime endDate);
+    public Task<int> GetCountOfRepeatVisitsForLastMonthAsync();
 
     /// <summary>
     /// Gets patients older than 30 who visited more than one doctor, ordered by birthday as DTOs
     /// </summary>
-    /// <param name="currentDate">Current date for age calculation</param>
     /// <returns>List of filtered patients ordered by birthday as DTOs</returns>
-    public Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(DateOnly? currentDate);
+    public Task<List<PatientResponseDto>> GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync();
 
     /// <summary>
-    /// Gets all visits for specific date range in selected cabinet as DTOs
+    /// Gets all visits for current month selected cabinet as DTOs
     /// </summary>
-    /// <param name="startDate">Start date of the range</param>
     /// <param name="cabinet">Cabinet number</param>
     /// <returns>List of filtered visits as DTOs</returns>
-    public Task<List<VisitResponseDto>> GetAllVisitsForDateInSelectedCabinetAsync(string? cabinet, DateTime? startDate);
+    public Task<List<VisitResponseDto>> GetAllVisitsForCurrentMonthInSelectedCabinetAsync(string? cabinet);
 }

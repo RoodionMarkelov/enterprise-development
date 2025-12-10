@@ -60,10 +60,7 @@ public class PolyclinicRepoTests(PolyclinicRepoFixture fixture) : IClassFixture<
     {
         const int expectedCount = 4;
 
-        var startDate = new DateTime(2024, 1, 1);
-        var endDate = new DateTime(2024, 1, 31);
-
-        var repeatVisitsCount = await fixture.VisitService.GetCountOfRepeatVisitsForRangeOfDateAsync(startDate, endDate);
+        var repeatVisitsCount = await fixture.VisitService.GetCountOfRepeatVisitsForLastMonthAsync();
 
         Assert.Equal(expectedCount, repeatVisitsCount);
     }
@@ -75,7 +72,7 @@ public class PolyclinicRepoTests(PolyclinicRepoFixture fixture) : IClassFixture<
     public async Task AllPatientsOlder30YearsToSomeDoctorsOrderedByBirthday()
     {
         const int expectedCount = 5;
-        var currentDate = new DateOnly(2025, 10, 3);
+
         var expectedPatientsNames = new List<string>
         {
             "Nikolaev Viktor Ivanovich",
@@ -85,7 +82,7 @@ public class PolyclinicRepoTests(PolyclinicRepoFixture fixture) : IClassFixture<
             "Petrova Maria Ivanovna"
         };
 
-        var experiencedPatients = await fixture.VisitService.GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(currentDate);
+        var experiencedPatients = await fixture.VisitService.GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync();
 
         Assert.Equal(expectedCount, experiencedPatients.Count);
         Assert.Equal(expectedPatientsNames, experiencedPatients.Select(p => p.Name));
@@ -98,10 +95,12 @@ public class PolyclinicRepoTests(PolyclinicRepoFixture fixture) : IClassFixture<
     public async Task AllVisitsForLastMonthInSelectedCabinet()
     {
         const int expectedCount = 3;
-        const string cabinet = "101-A";
-        var startDate = new DateTime(2024, 1, 1);
 
-        var cabinetVisits = await fixture.VisitService.GetAllVisitsForDateInSelectedCabinetAsync(cabinet, startDate);
+        const string cabinet = "101-A";
+        var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        var cabinetVisits = await fixture.VisitService.GetAllVisitsForCurrentMonthInSelectedCabinetAsync(cabinet);
 
         Assert.Equal(expectedCount, cabinetVisits.Count);
     }

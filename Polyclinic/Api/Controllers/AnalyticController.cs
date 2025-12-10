@@ -32,54 +32,45 @@ public class AnalyticController(
     }
 
     /// <summary>
-    /// Get count of repeat visits within date range
+    /// Get count of repeat visits for last month
     /// </summary>
-    /// <param name="startDate">Start date</param>
-    /// <param name="endDate">End date</param>
     /// <returns>Count of repeat visits</returns>
     [HttpGet("visits/repeat-count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<int>> GetRepeatVisitsCount(
-        [FromQuery] DateTime startDate,
-        [FromQuery] DateTime endDate)
+    public async Task<ActionResult<int>> GetRepeatVisitsCount()
     {
-        logger.LogInformation("Getting repeat visits count from {StartDate} to {EndDate}", startDate, endDate);
-        var count = await visitService.GetCountOfRepeatVisitsForRangeOfDateAsync(startDate, endDate);
+        logger.LogInformation("Getting repeat visits count for last month");
+        var count = await visitService.GetCountOfRepeatVisitsForLastMonthAsync();
         return Ok(count);
     }
 
     /// <summary>
     /// Get patients older than 30 who visited more than one doctor
     /// </summary>
-    /// <param name="currentDate">Current date for age calculation (default: today)</param>
     /// <returns>List of patients</returns>
     [HttpGet("patients/older-than-30-multiple-doctors")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<PatientResponseDto>>> GetPatientsOlderThan30WithMultipleDoctors(
-        [FromQuery] DateTime? currentDate)
+    public async Task<ActionResult<List<PatientResponseDto>>> GetPatientsOlderThan30WithMultipleDoctors()
     {
-        logger.LogInformation("Getting patients older than 30 with multiple doctors as of {CurrentDate}", currentDate);
+        logger.LogInformation("Getting patients older than 30 with multiple doctors as of current date");
 
-        DateOnly? currentDateOnly = currentDate.HasValue ? DateOnly.FromDateTime(currentDate.Value) : null;
 
-        var patients = await visitService.GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync(currentDateOnly);
+        var patients = await visitService.GetAllPatientsOlderAgeToSomeDoctorsOrderedByBirthdayAsync();
         return Ok(patients);
     }
 
     /// <summary>
-    /// Get all visits in specified cabinet within date range
+    /// Get all visits in specified cabinet in current month
     /// </summary>
-    /// <param name="startDate">Start date (default: 2024-01-01)</param>
     /// <param name="cabinet">Cabinet number (default: "101-A")</param>
     /// <returns>List of visits</returns>
     [HttpGet("visits/by-cabinet")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<VisitResponseDto>>> GetVisitsByCabinet(
-        [FromQuery] string? cabinet,
-        [FromQuery] DateTime? startDate)
+        [FromQuery] string? cabinet)
     {
-        logger.LogInformation("Getting visits in cabinet {Cabinet} from {StartDate}", cabinet, startDate);
-        var visits = await visitService.GetAllVisitsForDateInSelectedCabinetAsync(cabinet, startDate);
+        logger.LogInformation("Getting visits in cabinet {Cabinet} from current month", cabinet);
+        var visits = await visitService.GetAllVisitsForCurrentMonthInSelectedCabinetAsync(cabinet);
         return Ok(visits);
     }
 

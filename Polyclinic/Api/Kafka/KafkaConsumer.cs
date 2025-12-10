@@ -16,6 +16,11 @@ public class KafkaConsumer(
 {
     private readonly string _topic = configuration["KafkaTopic"] ?? "visit-events";
 
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     /// <summary>
     /// Main execution loop that continuously consumes Kafka messages and processes visit events.
     /// </summary>
@@ -43,7 +48,7 @@ public class KafkaConsumer(
 
                 var visitDto = JsonSerializer.Deserialize<VisitDto>(
                     consumeResult.Message.Value,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    _jsonSerializerOptions);
 
                 if (visitDto == null)
                 {
