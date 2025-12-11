@@ -21,8 +21,6 @@ public class KafkaProducer(
     /// <returns>A task representing the asynchronous operation.</returns>
     protected override async Task ExecuteAsync(CancellationToken stopToken)
     {
-        var config = settings.Value;
-
         logger.LogInformation(
             "KafkaProducer started with IntervalMs={IntervalMs}, BatchSize={BatchSize}, Topic={Topic}",
              settings.Value.IntervalMs,
